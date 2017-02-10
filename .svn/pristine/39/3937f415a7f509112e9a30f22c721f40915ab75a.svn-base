@@ -1,0 +1,14 @@
+package com.spanel.dao;
+
+import com.spanel.beans.Class;
+
+/**
+ * Created by koria on 04/12/2016.
+ */
+public interface ClassDAO {
+    void create(Class classe) throws DAOException;
+    void update(Long id) throws DAOException;
+    Class find(Long id) throws DAOException;
+
+
+}

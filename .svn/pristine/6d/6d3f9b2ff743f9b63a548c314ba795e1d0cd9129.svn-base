@@ -1,0 +1,202 @@
+package com.spanel.views.schedule;
+
+import com.spanel.App;
+import com.spanel.app.Request;
+import com.spanel.beans.Class;
+import com.spanel.controllers.FileController;
+import com.spanel.helpers.ImagePanel;
+import com.spanel.views.Layout;
+import com.spanel.views.schedule.imge.SaveIconFile;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDate;
+
+
+/**
+ * Created by Joel on 24/11/2016.
+ */
+public class View extends JPanel {
+    private SaveIconFile saveIconFile;
+    private JPanel bottomPanel;
+    private JPanel centerPanel;
+    private JButton downloadButton;
+    private JButton itemDownloadButton;
+    private JLabel itemLabel;
+    private JScrollPane jScrollPane;
+    private JPanel mainPanel;
+    private JLabel oldVersionLabel;
+    private JPanel oldVersionsContainer;
+    private JPanel rightPanel;
+    private JPanel schedulePanel;
+    private JButton uploadButton;
+    private JLabel scheduleLabel;
+    private Layout parent;
+    private com.spanel.views.ClassIndex classroom;
+    private Request request ;
+
+    public View(com.spanel.views.ClassIndex classroom) {
+        this.classroom=classroom;
+        initComponents();
+        setVisible(true);
+    }
+
+    private void initComponents() {
+
+        jScrollPane = new JScrollPane();
+        mainPanel = new JPanel();
+        rightPanel = new JPanel();
+        oldVersionLabel = new JLabel();
+        oldVersionsContainer = new JPanel();
+        itemLabel = new JLabel();
+        itemDownloadButton = new JButton();
+        centerPanel = new JPanel();
+        request = new Request(parent, classroom.getMain());
+        downloadButton = new JButton();
+        bottomPanel = new JPanel();
+        uploadButton = new JButton();
+        scheduleLabel = new JLabel();
+
+        setBackground(new Color(255, 255, 255));
+        setPreferredSize(new Dimension(770, 520));
+        setLayout(new BorderLayout());
+
+        if(FileController.find(request)==null) {FileController.find(request).setPath("assets/uploads/img/b.jpg");}
+        schedulePanel = new ImagePanel(FileController.find(request).getPath(),schedulePanel);
+
+        jScrollPane.setBackground(new Color(255, 255, 255));
+        jScrollPane.setBorder(null);
+
+        mainPanel.setBackground(new Color(255, 255, 255));
+        mainPanel.setLayout(new BorderLayout());
+
+        rightPanel.setBackground(new Color(255, 255, 255));
+        rightPanel.setPreferredSize(new Dimension(250, 20));
+
+        oldVersionLabel.setFont(oldVersionLabel.getFont().deriveFont(oldVersionLabel.getFont().getSize()+3f));
+        oldVersionLabel.setText("Versions precédentes");
+
+        oldVersionsContainer.setLayout(new GridLayout(1, 2, 2, 5));
+
+        itemLabel.setForeground(new Color(0, 51, 102));
+        if(FileController.findOldSchedule(request).getName()==null){
+             if( !(FileController.find(request).getDate().equals("")) ) {
+                itemLabel.setText("" + FileController.find(request).getDate() + "");
+            }else{
+                itemLabel.setText("2017-01-16");
+            }
+        }else{
+            itemLabel.setText(""+FileController.findOldSchedule(request).getDate()+"");
+        }
+        oldVersionsContainer.add(itemLabel);
+
+        itemDownloadButton.setText("Télécharger");
+        itemDownloadButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        itemDownloadButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                itemDownloadButtonActionPerformed(evt);
+            }
+        });
+        oldVersionsContainer.add(itemDownloadButton);
+
+        GroupLayout rightPanelLayout = new GroupLayout(rightPanel);
+        rightPanel.setLayout(rightPanelLayout);
+        rightPanelLayout.setHorizontalGroup(
+                rightPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(rightPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(rightPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addGroup(rightPanelLayout.createSequentialGroup()
+                                                .addComponent(oldVersionLabel)
+                                                .addGap(0, 0, Short.MAX_VALUE))
+                                        .addComponent(oldVersionsContainer, GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE))
+                                .addContainerGap())
+        );
+        rightPanelLayout.setVerticalGroup(
+                rightPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(rightPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(oldVersionLabel)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(oldVersionsContainer, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(420, Short.MAX_VALUE))
+        );
+
+        mainPanel.add(rightPanel, BorderLayout.LINE_END);
+
+        centerPanel.setBackground(new Color(255, 255, 255));
+
+        downloadButton.setText("Télécharger");
+        downloadButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        downloadButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                downloadButtonActionPerformed(evt);
+            }
+        });
+
+        GroupLayout centerPanelLayout = new GroupLayout(centerPanel);
+        centerPanel.setLayout(centerPanelLayout);
+        centerPanelLayout.setHorizontalGroup(
+                centerPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(centerPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(centerPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(schedulePanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(centerPanelLayout.createSequentialGroup()
+                                                .addComponent(downloadButton)
+                                                .addGap(0, 411, Short.MAX_VALUE)))
+                                .addContainerGap())
+        );
+        centerPanelLayout.setVerticalGroup(
+                centerPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(centerPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(schedulePanel, GroupLayout.PREFERRED_SIZE, 331, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(downloadButton)
+                                .addContainerGap(101, Short.MAX_VALUE))
+        );
+
+        mainPanel.add(centerPanel, BorderLayout.CENTER);
+
+        jScrollPane.setViewportView(mainPanel);
+
+        add(jScrollPane, BorderLayout.CENTER);
+
+        bottomPanel.setBackground(new Color(255, 255, 255));
+        bottomPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 15, 10));
+
+        uploadButton.setText("Uploader");
+        uploadButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        uploadButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new Upload(parent,true,classroom).setVisible(true);
+            }
+        });
+        bottomPanel.add(uploadButton);
+
+        add(bottomPanel, BorderLayout.PAGE_END);
+    }
+
+    private void itemDownloadButtonActionPerformed(ActionEvent evt) {
+        File file = new File(FileController.findOldSchedule(request).getPath());
+        FileController.saveFileOnDisk(file.getPath(),file.getName());
+        JOptionPane.showMessageDialog(this, "the file "+file.getName()+" has been downloaded in C:\\Users\\"+System.getProperty("user.name")+"\\Downloads", "Confirmation", JOptionPane.INFORMATION_MESSAGE);
+
+    }
+
+    private void downloadButtonActionPerformed(ActionEvent evt) {
+        File file = new File(FileController.find(request).getPath());
+        FileController.saveFileOnDisk(file.getPath(),file.getName());
+        JOptionPane.showMessageDialog(this, "the file "+file.getName()+" has been downloaded in C:\\Users\\"+System.getProperty("user.name")+"\\Downloads", "Confirmation", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+
+}

@@ -1,0 +1,207 @@
+package com.spanel.dao;
+
+import com.spanel.beans.Professor;
+import com.spanel.beans.Student;
+import com.spanel.beans.User;
+import static com.spanel.dao.DAOUtilitary.*;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by Joel on 25/11/2016.
+ */
+public class UserDAOImpl implements UserDAO{
+    private static final String SQL_SELECT_BY_EMAIL = 
+            "SELECT id, first_name, last_name, email, phone, password, userable_id, userable_type FROM users WHERE email = ?";
+    private static final String SQL_SELECT_BY_PHONE =
+            "SELECT id, first_name, last_name, email, phone, password, userable_id, userable_type FROM users WHERE phone = ?";
+    private static final String SQL_SELECT_BY_ID = "SELECT * FROM users WHERE id = ?";
+    private static final String SQL_INSERT = 
+            "INSERT INTO users (first_name, last_name, email, phone, password, userable_id, userable_type) VALUES (?,?,?,?,?,?,?)";
+    private static final String SQL_SELECT_STUDENTS = "SELECT users.id,users.first_name,users.last_name,users.email,users.phone,users.password,users.userable_id ,users.userable_type FROM users WHERE users.userable_id IN(SELECT id FROM students WHERE class_id IS NULL) AND users.userable_type = \"students\"";
+    private static final String SQL_UPDATE = 
+            "UPDATE users SET first_name = ?, last_name = ?, email = ?, phone = ?, password = ?, userable_id = ?, userable_type = ? WHERE id = ? ";
+    private static final String SQL_SELECT_PROFESSORS = 
+            "SELECT users.id,users.first_name, users.last_name, users.email, users.phone, users.password, users.userable_id, users.userable_type FROM users WHERE users.userable_type = \"professors\" ";
+
+    private static final String SQL_SELECT_UNAFFECTED_STUDENTS = 
+            "SELECT users.id,users.first_name,users.last_name,users.email,users.phone,users.password,users.userable_id ,users.userable_type FROM users WHERE users.userable_id IN(SELECT id FROM students WHERE class_id IS NULL) AND users.userable_type = \"students\"";
+    private static final String SQL_SELECT_STUDENTS_IN_CLASS =
+            "SELECT * FROM users WHERE userable_id IN (" +
+                    "SELECT id FROM students WHERE class_id = ?" +
+            ") AND userable_type = 'students' ";
+
+    private static final String SQL_SELECT_BY_PROFESSOR_ID =
+            "SELECT * FROM users WHERE userable_id = ? AND userable_type = 'professors'";
+
+    private DAOFactory          daoFactory;
+
+    UserDAOImpl( DAOFactory daoFactory ) {
+        this.daoFactory = daoFactory;
+    }
+
+    @Override
+    public void create(User user) throws DAOException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet autoGenerateValues = null;
+
+        try {
+            connection = daoFactory.getConnection();
+            preparedStatement = initPreparedStatement( connection, SQL_INSERT, true, user.getFirstName(), user.getLastName(), user.getEmail(), user.getPhone(), user.getPassword(), user.getUserableId(), user.getUserableType());
+            int state = preparedStatement.executeUpdate();
+            if ( state == 0 ) {
+                throw new DAOException( "Echec de la création de l'utilisateur, aucune ligne ajoutée à la table." );
+            }
+            autoGenerateValues = preparedStatement.getGeneratedKeys();
+            if ( autoGenerateValues.next() ) {
+                user.setId( autoGenerateValues.getLong( 1 ) );
+            } else {
+                throw new DAOException( "Echec de la création de l'utilisateur en base, aucun ID auto-généré retourné." );
+            }
+        } catch ( SQLException e ) {
+            throw new DAOException( e );
+        } finally {
+            silentClose( autoGenerateValues, preparedStatement, connection );
+        }
+    }
+
+    @Override
+    public void update(User user) throws DAOException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = daoFactory.getConnection();
+            preparedStatement = initPreparedStatement( connection, SQL_UPDATE, true, user.getFirstName(), user.getLastName(), user.getEmail(), user.getPhone(), user.getPassword(), user.getUserableId(), user.getUserableType(), user.getId());
+            int state = preparedStatement.executeUpdate();
+            if ( state == 0 ) {
+                throw new DAOException("Failed to create User,No rows have been added to the table ");
+            }
+        } catch ( SQLException e ) {
+            throw new DAOException( e );
+        } finally {
+            silentClose( preparedStatement, connection );
+        }
+    }
+
+
+    @Override
+    public List<User> findNonAffectedStudents() throws DAOException {
+
+        return findMany(SQL_SELECT_UNAFFECTED_STUDENTS);
+    }
+
+    @Override
+    public List<User> findAllStudentsInClass(Long classId) throws DAOException {
+        return findMany(SQL_SELECT_STUDENTS_IN_CLASS, classId);
+    }
+
+
+
+    @Override
+    public void link(User user, Object object) throws DAOException {
+        if(object instanceof Student){
+            Student student = (Student) object;
+            user.setUserableId(student.getId());
+            user.setUserableType("students");
+            update(user);
+        }else{
+            Professor professor = (Professor) object;
+            user.setUserableId(professor.getId());
+            user.setUserableType("professors");
+            update(user);
+        }
+    }
+
+    @Override
+    public User find(String email) throws DAOException {
+        return find(SQL_SELECT_BY_EMAIL, email);
+    }
+
+    @Override
+    public User find(Long id) throws DAOException {
+        return find(SQL_SELECT_BY_ID,id);
+    }
+
+    @Override
+    public User findByPhone(Long phone) throws DAOException {
+        return find(SQL_SELECT_BY_PHONE, phone);
+    }
+
+    @Override
+    public User findProfessor(Professor professor) throws DAOException {
+        return find(SQL_SELECT_BY_PROFESSOR_ID, professor.getId());
+    }
+
+    @Override
+    public User findProfessor(Long professorId) throws DAOException {
+        return find(SQL_SELECT_BY_PROFESSOR_ID, professorId);
+    }
+
+    @Override
+    public List<User> findAllProfessors() throws DAOException {
+        return findMany(SQL_SELECT_PROFESSORS);
+    }
+
+    private User find(String sql, Object... objects ) throws DAOException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        User user = null;
+
+        try {
+            connection = daoFactory.getConnection();
+            preparedStatement = initPreparedStatement( connection, sql, false, objects );
+            resultSet = preparedStatement.executeQuery();
+            if ( resultSet.next() ) {
+                user = map( resultSet );
+            }
+        } catch ( SQLException e ) {
+            throw new DAOException( e );
+        } finally {
+            silentClose( resultSet, preparedStatement, connection );
+        }
+
+        return user;
+    }
+
+    private List<User> findMany(String sql, Object... objects) throws DAOException{
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        List<User> students = new ArrayList<>();
+        try{
+            connection=daoFactory.getConnection();
+            preparedStatement=initPreparedStatement(connection,sql,false,objects);
+            resultSet=preparedStatement.executeQuery();
+            while(resultSet.next()){
+                students.add(map(resultSet));
+            }
+        }catch(SQLException e){
+            throw new DAOException(e);
+        }finally {
+            silentClose(resultSet,preparedStatement,connection);
+        }
+
+        return students;
+    }
+
+    public static User map( ResultSet resultSet ) throws SQLException {
+        User user = new User();
+        user.setId( resultSet.getLong( "id" ) );
+        user.setFirstName( resultSet.getString( "first_name" ) );
+        user.setLastName( resultSet.getString( "last_name" ) );
+        user.setPhone( resultSet.getLong( "phone" ) );
+        user.setEmail( resultSet.getString( "email" ) );
+        user.setPassword( resultSet.getString( "password" ) );
+        user.setUserableId( resultSet.getLong("userable_id") );
+        user.setUserableType( resultSet.getString("userable_type") );
+        return user;
+    }
+}
+

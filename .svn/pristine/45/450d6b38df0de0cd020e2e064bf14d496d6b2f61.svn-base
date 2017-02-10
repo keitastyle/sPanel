@@ -1,0 +1,10 @@
+package com.spanel.dao;
+
+import com.spanel.beans.Professor;
+
+/**
+ * Created by Joel on 06/12/2016.
+ */
+public interface ProfessorDAO {
+    void create(Professor professor) throws DAOException;
+}

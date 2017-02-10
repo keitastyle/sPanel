@@ -1,0 +1,68 @@
+package com.spanel.dao;
+
+import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.ConnectionPropertiesImpl;
+import com.mysql.jdbc.PreparedStatement;
+import com.spanel.beans.Course;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import static com.spanel.dao.DAOUtilitary.*;
+
+/**
+ * Created by koyre on 12/5/16.
+ */
+public class CourseDAOImpl implements CourseDAO {
+
+    private DAOFactory daoFactory;
+    private static final String SQL_INSERT = "INSERT INTO courses (name) values (?)";
+
+    @Override
+    public void create(Course course) throws DAOException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet autoGenerateValue =null;
+        try {
+            connection = (Connection) daoFactory.getConnection();
+            preparedStatement = (PreparedStatement) initPreparedStatement(connection, SQL_INSERT, true, course.getName());
+            int status = preparedStatement.executeUpdate();
+
+            if (status == 0){
+                throw new DAOException("Failed to create Course,No rows have been added to the table ");
+            }
+            autoGenerateValue = preparedStatement.getGeneratedKeys();
+            if (autoGenerateValue.next()){
+                    course.setId(autoGenerateValue.getLong(1));
+                    System.out.println(course.getId());
+                    System.out.println(course.getName());
+            }else {
+                throw new DAOException("Failed to create Course in database,No id auto generated value  ");
+            }
+
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        } finally {
+            silentClose(autoGenerateValue,preparedStatement,connection);
+        }
+
+    }
+
+    @Override
+    public Course find(Long id) throws DAOException,IllegalArgumentException {
+        return null;
+    }
+
+    public CourseDAOImpl(DAOFactory daoFactory) {
+        this.daoFactory = daoFactory;
+    }
+
+
+    private static Course map( ResultSet resultSet ) throws SQLException {
+        Course course = new Course();
+        course.setId( resultSet.getLong( "id" ) );
+        course.setName( resultSet.getString("name"));
+        return course;
+    }
+
+}

@@ -1,0 +1,7 @@
+package com.spanel.controllers;
+
+/**
+ * Created by koria on 04/12/2016.
+ */
+public class CourseController {
+}

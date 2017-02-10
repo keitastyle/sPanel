@@ -1,0 +1,79 @@
+package com.spanel.config;
+
+import com.spanel.beans.User;
+import com.spanel.dao.DAOFactory;
+import com.spanel.forms.ConnectionForm;
+import org.jetbrains.annotations.Nullable;
+
+import java.io.*;
+import java.nio.file.Files;
+import java.util.Properties;
+
+/**
+ * Created by Joel on 04/12/2016.
+ */
+public class Session {
+    public static String SESSION_PATH = "com/session/";
+    public static String USER_SESSION_FILE = "com/session/user.session";
+    public static  String USER_SESSION_EMAIL_PROPERTY = "email";
+    public static  String USER_SESSION_PASSWORD_PROPERTY = "password";
+
+    public static void deleteUserSession(){
+        try {
+            File file = new File(USER_SESSION_FILE);
+            if(!file.delete()){
+                System.out.println("Delete operation is failed.");
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void saveUserSession(User user){
+        Properties propperties = new Properties();
+        OutputStream userSessionFile;
+        try {
+            userSessionFile = new FileOutputStream(USER_SESSION_FILE);
+            propperties.setProperty(USER_SESSION_EMAIL_PROPERTY, user.getEmail());
+            propperties.setProperty(USER_SESSION_PASSWORD_PROPERTY, user.getPassword());
+            propperties.store(userSessionFile, null);
+            userSessionFile.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    @Nullable
+    public static User loadUserSession(DAOFactory daoFactory){
+        User user;
+
+        Properties properties = new Properties();
+        String email;
+        String password;
+
+        try {
+            InputStream userSessionFile = new FileInputStream( USER_SESSION_FILE );
+            properties.load(userSessionFile);
+            email = properties.getProperty(USER_SESSION_EMAIL_PROPERTY);
+            password = properties.getProperty(USER_SESSION_PASSWORD_PROPERTY);
+            userSessionFile.close();
+        } catch ( IOException e ) {
+            System.out.println("Impossible de charger le fichier properties " + USER_SESSION_FILE);
+            System.out.println(e.getMessage());
+            return null;
+        }
+
+        ConnectionForm form = new ConnectionForm(daoFactory.getUserDao());
+        user = form.connect(email, password);
+
+        if(form.hasErrors()){
+            System.out.println(form.getErrors());
+            deleteUserSession();
+            return null;
+        }
+
+        return user;
+    }
+
+
+}

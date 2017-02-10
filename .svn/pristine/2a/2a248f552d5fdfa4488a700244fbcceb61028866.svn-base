@@ -1,0 +1,262 @@
+package com.spanel.views.auth;
+
+import com.spanel.App;
+import com.spanel.app.Request;
+import com.spanel.controllers.AuthController;
+import com.spanel.forms.ConnectionForm;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+/**
+ * Created by Joel on 25/11/2016.
+ */
+public class Login extends JFrame {
+
+    private App main;
+
+    private JScrollPane descriptionScrollPane;
+    private JTextArea descriptionTextArea;
+    private JTextField emailField;
+    private JLabel emailLabel;
+    private JSeparator jSeparator;
+    private JButton loginButton;
+    private JLabel loginLabel;
+    private JPanel mainPanel;
+    private JLabel noAccountLabel;
+    private JPasswordField passwordField;
+    private JLabel passwordLabel;
+    private JPanel rightSidePanel;
+    private JLabel registrationLabel;
+    private JLabel welcomeLabel;
+
+    private Font defaultFont = new Font("Calibri", Font.PLAIN, 14);
+    private Font defaultFontLight = new Font("Calibri Light", Font.PLAIN, 14);
+
+    private final String DESCRIPTION_TEXT = "sPanel est une plateforme intranet qui a pour but de : \n   •   Centraliser les informations\n   •   Garantir aux étudiants un accès plus simple et plus rapides aux informations\n   •   Permettre aux professeurs et à l’administration de transférer plus rapidement des informations telles que les annonces, les emplois de temps, les programmes d’examens, les notes…etc.\n   •   Garantir l’interconnexion et faciliter les échanges entre l’administration, les étudiants et les professeurs.\n\n";
+    private final String FRAME_TITLE = "sPanel | Connexion";
+
+
+
+    public Login(App main) {
+        this.main = main;
+
+        try {
+            UIManager.setLookAndFeel(
+                    UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+
+        setTitle(FRAME_TITLE);
+        initComponents();
+    }
+
+
+
+    private void registration(MouseEvent evt) {
+        new Registration(main).setVisible(true);
+        setVisible(false);
+        dispose();
+    }
+
+    private void login(ActionEvent evt) {
+        Request request = new Request(this, this.main);
+        request.addField(ConnectionForm.EMAIL_FIELD, emailField.getText());
+        request.addField(ConnectionForm.PASSWORD_FIELD, new String(passwordField.getPassword()));
+
+        AuthController.login(request);
+    }
+
+
+    private void initComponents() {
+        mainPanel = new JPanel();
+        jSeparator = new JSeparator();
+        welcomeLabel = new JLabel();
+        descriptionScrollPane = new JScrollPane();
+        descriptionTextArea = new JTextArea();
+        rightSidePanel = new JPanel();
+        loginLabel = new JLabel();
+        noAccountLabel = new JLabel();
+        registrationLabel = new JLabel();
+        emailLabel = new JLabel();
+        passwordLabel = new JLabel();
+        emailField = new JTextField();
+        passwordField = new JPasswordField();
+        loginButton = new JButton();
+
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setFont(defaultFont);
+        setMinimumSize(new Dimension(1024, 680));
+        setResizable(false);
+
+        mainPanel.setBackground(new Color(250, 250, 250));
+        mainPanel.setForeground(new Color(102, 102, 102));
+        mainPanel.setFont(defaultFont);
+        mainPanel.setMinimumSize(new Dimension(1024, 680));
+
+        jSeparator.setForeground(new Color(204, 204, 204));
+        jSeparator.setOrientation(SwingConstants.VERTICAL);
+
+        welcomeLabel.setFont(defaultFont.deriveFont((float)24)); // NOI18N
+        welcomeLabel.setForeground(new Color(102, 102, 102));
+        welcomeLabel.setText("Bienvenue sur sPanel");
+
+        descriptionScrollPane.setBorder(null);
+
+        descriptionTextArea.setBackground(new Color(250, 250, 250));
+        descriptionTextArea.setColumns(20);
+        descriptionTextArea.setFont(defaultFont);
+        descriptionTextArea.setForeground(new Color(102, 102, 102));
+        descriptionTextArea.setLineWrap(true);
+        descriptionTextArea.setRows(5);
+        descriptionTextArea.setText(DESCRIPTION_TEXT);
+        descriptionTextArea.setWrapStyleWord(true);
+        descriptionTextArea.setBorder(null);
+        descriptionTextArea.setFocusable(false);
+        descriptionScrollPane.setViewportView(descriptionTextArea);
+
+        rightSidePanel.setBackground(new Color(255, 255, 255));
+        rightSidePanel.setFont(defaultFont);
+        rightSidePanel.setInheritsPopupMenu(true);
+
+        loginLabel.setFont(defaultFontLight.deriveFont((float)24));
+        loginLabel.setForeground(new Color(0, 102, 204));
+        loginLabel.setText("Connexion");
+
+        noAccountLabel.setFont(defaultFont); // NOI18N
+        noAccountLabel.setText("Pas encore de compte ? ");
+
+        registrationLabel.setFont(defaultFont);
+        registrationLabel.setForeground(new Color(0, 102, 204));
+        registrationLabel.setText("Inscription");
+        registrationLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        registrationLabel.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent evt) {
+                registration(evt);
+            }
+        });
+
+        emailLabel.setFont(defaultFont.deriveFont((float)20));
+        emailLabel.setForeground(new Color(102, 102, 102));
+        emailLabel.setText("Email");
+
+        passwordLabel.setFont(defaultFont.deriveFont((float)20));
+        passwordLabel.setForeground(new Color(102, 102, 102));
+        passwordLabel.setText("Mot de passe");
+
+        emailField.setFont(defaultFont.deriveFont((float)20));
+        emailField.setForeground(new Color(102, 102, 102));
+
+        passwordField.setFont(defaultFont.deriveFont((float)18));
+        passwordField.setForeground(new Color(102, 102, 102));
+
+        //loginButton.setBackground(new Color(0, 102, 255));
+        loginButton.setFont(new Font("Calibri Light", 0, 18));
+        //loginButton.setForeground(new Color(255, 255, 255));
+        loginButton.setText("Connexion");
+        loginButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        loginButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                login(evt);
+            }
+        });
+
+        GroupLayout rightSidePanelLayout = new GroupLayout(rightSidePanel);
+        rightSidePanel.setLayout(rightSidePanelLayout);
+        rightSidePanelLayout.setHorizontalGroup(
+                rightSidePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(GroupLayout.Alignment.TRAILING, rightSidePanelLayout.createSequentialGroup()
+                                .addContainerGap(332, Short.MAX_VALUE)
+                                .addComponent(noAccountLabel)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(registrationLabel)
+                                .addGap(160, 160, 160))
+                        .addGroup(rightSidePanelLayout.createSequentialGroup()
+                                .addGap(41, 41, 41)
+                                .addGroup(rightSidePanelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                        .addComponent(loginButton, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(rightSidePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(passwordField)
+                                                .addComponent(emailField, GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
+                                                .addComponent(passwordLabel)
+                                                .addComponent(emailLabel)
+                                                .addComponent(loginLabel)))
+                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        rightSidePanelLayout.setVerticalGroup(
+                rightSidePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(rightSidePanelLayout.createSequentialGroup()
+                                .addGap(24, 24, 24)
+                                .addGroup(rightSidePanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                        .addComponent(registrationLabel)
+                                        .addComponent(noAccountLabel))
+                                .addGap(33, 33, 33)
+                                .addComponent(loginLabel)
+                                .addGap(35, 35, 35)
+                                .addComponent(emailLabel)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(emailField, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(passwordLabel)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(passwordField, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(loginButton, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())
+        );
+
+        GroupLayout mainPanelLayout = new GroupLayout(mainPanel);
+        mainPanel.setLayout(mainPanelLayout);
+        mainPanelLayout.setHorizontalGroup(
+                mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addGroup(mainPanelLayout.createSequentialGroup()
+                                                .addGap(71, 71, 71)
+                                                .addComponent(descriptionScrollPane, GroupLayout.PREFERRED_SIZE, 274, GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(mainPanelLayout.createSequentialGroup()
+                                                .addGap(100, 100, 100)
+                                                .addComponent(welcomeLabel)))
+                                .addGap(73, 73, 73)
+                                .addComponent(jSeparator, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(rightSidePanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+        );
+        mainPanelLayout.setVerticalGroup(
+                mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addComponent(jSeparator, GroupLayout.Alignment.TRAILING)
+                        .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addGap(95, 95, 95)
+                                .addComponent(welcomeLabel)
+                                .addGap(57, 57, 57)
+                                .addComponent(descriptionScrollPane, GroupLayout.PREFERRED_SIZE, 368, GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(rightSidePanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        GroupLayout layout = new GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addComponent(mainPanel, GroupLayout.PREFERRED_SIZE, 1024, GroupLayout.PREFERRED_SIZE)
+        );
+        layout.setVerticalGroup(
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addComponent(mainPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        pack();
+    }
+
+
+}

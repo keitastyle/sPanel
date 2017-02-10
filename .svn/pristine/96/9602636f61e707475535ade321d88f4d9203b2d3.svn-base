@@ -1,0 +1,67 @@
+package com.spanel.forms;
+
+import com.spanel.app.Request;
+import com.spanel.beans.Affectation;
+import com.spanel.dao.*;
+
+/**
+ * Created by koyre on 23/12/16.
+ */
+public class AllocationCourseForm extends Form{
+
+    private ClassDAO classDAO;
+    private ModuleDAO moduleDAO;
+    private UserDAO professorUserDAO;
+    private CourseDAO courseDAO;
+    private AffectationDAO affectationDAO;
+
+    public static final String courseNameFields="nameCourse";
+    public static final String moduleNameFields="nameModule";
+    public static final String PROFESSOR_LAST_NAME_FIELDS ="first_name";
+    public static final String PROFESSOR_FIRST_NAME_FIELDS ="first_name";
+    public static final String HOURS_FIELDS = "hours";
+    public static final String COEFFICIENT_FIELDS = "coef";
+    public static final String CLASS_NAME_FIELDS = "className";
+
+
+
+    public AllocationCourseForm(ClassDAO classDAO, ModuleDAO moduleDAO, UserDAO userDAO,CourseDAO courseDAO,AffectationDAO affectationDAO) {
+        this.classDAO = classDAO;
+        this.moduleDAO = moduleDAO;
+        this.professorUserDAO = userDAO;
+        this.courseDAO = courseDAO;
+        this.affectationDAO= affectationDAO;
+    }
+
+    public void create(Request request) {
+        String nameModule = request.getFieldValue(moduleNameFields);
+        String nameClass = request.getFieldValue(CLASS_NAME_FIELDS);
+        String nameCourse = request.getFieldValue(courseNameFields);
+        String lastNameProfessor = request.getFieldValue(PROFESSOR_LAST_NAME_FIELDS);
+        String firstNameProfessor = request.getFieldValue(PROFESSOR_FIRST_NAME_FIELDS);
+        String hours = request.getFieldValue(HOURS_FIELDS);
+        String coef = request.getFieldValue(COEFFICIENT_FIELDS);
+
+        if(!hasErrors()){
+            Affectation affectation = new Affectation();
+
+            Long professorId = professorUserDAO.findProfessorByName(lastNameProfessor,firstNameProfessor).getUserableId();
+            Long classId = classDAO.find(nameClass).getId();
+            Long moduleId = moduleDAO.find(nameModule).getId();
+            Long classModuleId =affectationDAO.findIdClassModule(classId,moduleId) ;
+            Long courseId = courseDAO.findByName(nameCourse).getId() ;
+            Long hour= Long.parseLong(hours);
+            Long coefficient =Long.parseLong(coef);
+
+            affectation.setCoefficient(coefficient);
+            affectation.setCourseId(courseId);
+            affectation.setHours(hour);
+            affectation.setProfessorId(professorId);
+            affectation.setClassModuleId(classModuleId);
+
+            affectationDAO.create(affectation);
+
+
+        }
+    }
+}

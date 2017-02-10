@@ -1,0 +1,152 @@
+package com.spanel.views.allocation;
+import javax.swing.*;
+import java.awt.*;
+
+/**
+ * Created by Joel on 03/12/2016.
+ */
+public class Students extends JPanel {
+    private JButton confirmButton;
+    private JLabel emailLabel;
+    private JLabel firstNameLabel;
+    private JLabel gapLabel;
+    private JPanel headerPanel;
+    private JCheckBox itemCheckBox;
+    private JLabel itemEmailLabel;
+    private JLabel itemFirstNameLabel;
+    private JLabel itemLastNameLabel;
+    private JPanel itemLeftPanel;
+    private JPanel itemPanel;
+    private JPanel itemPicturePanel;
+    private JScrollPane jScrollPane;
+    private JLabel lastNameLabel;
+    private JPanel mainPanel;
+
+    public Students(){
+        setBackground(Color.WHITE);
+        initComponents();
+    }
+
+    private void initComponents() {
+        jScrollPane = new JScrollPane();
+        mainPanel = new JPanel();
+        headerPanel = new JPanel();
+        gapLabel = new JLabel();
+        lastNameLabel = new JLabel();
+        firstNameLabel = new JLabel();
+        emailLabel = new JLabel();
+        itemPanel = new JPanel();
+        itemLeftPanel = new JPanel();
+        itemCheckBox = new JCheckBox();
+        itemPicturePanel = new JPanel();
+        itemFirstNameLabel = new JLabel();
+        itemLastNameLabel = new JLabel();
+        itemEmailLabel = new JLabel();
+        confirmButton = new JButton();
+
+        setPreferredSize(new Dimension(770, 520));
+        setLayout(new BorderLayout());
+
+        jScrollPane.setBorder(null);
+
+        mainPanel.setBackground(new Color(255, 255, 255));
+        mainPanel.setPreferredSize(new Dimension(780, 520));
+
+        headerPanel.setBackground(new Color(255, 255, 255));
+        headerPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(204, 204, 204)));
+        headerPanel.setLayout(new GridLayout(1, 4));
+        headerPanel.add(gapLabel);
+
+        lastNameLabel.setFont(lastNameLabel.getFont().deriveFont(lastNameLabel.getFont().getStyle() | Font.BOLD, lastNameLabel.getFont().getSize()+2));
+        lastNameLabel.setText("Nom");
+        headerPanel.add(lastNameLabel);
+
+        firstNameLabel.setFont(firstNameLabel.getFont().deriveFont(firstNameLabel.getFont().getStyle() | Font.BOLD, firstNameLabel.getFont().getSize()+2));
+        firstNameLabel.setText("Prénom");
+        headerPanel.add(firstNameLabel);
+
+        emailLabel.setFont(emailLabel.getFont().deriveFont(emailLabel.getFont().getStyle() | Font.BOLD, emailLabel.getFont().getSize()+2));
+        emailLabel.setText("Email");
+        headerPanel.add(emailLabel);
+
+        itemPanel.setLayout(new GridLayout(1, 4));
+
+
+        itemPicturePanel.setBackground(new Color(204, 204, 204));
+
+        GroupLayout itemPicturePanelLayout = new GroupLayout(itemPicturePanel);
+        itemPicturePanel.setLayout(itemPicturePanelLayout);
+        itemPicturePanelLayout.setHorizontalGroup(
+                itemPicturePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGap(0, 38, Short.MAX_VALUE)
+        );
+        itemPicturePanelLayout.setVerticalGroup(
+                itemPicturePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        GroupLayout itemLeftPanelLayout = new GroupLayout(itemLeftPanel);
+        itemLeftPanel.setLayout(itemLeftPanelLayout);
+        itemLeftPanelLayout.setHorizontalGroup(
+                itemLeftPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(itemLeftPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(itemCheckBox)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 97, Short.MAX_VALUE)
+                                .addComponent(itemPicturePanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addGap(31, 31, 31))
+        );
+        itemLeftPanelLayout.setVerticalGroup(
+                itemLeftPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(itemLeftPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(itemCheckBox)
+                                .addContainerGap(10, Short.MAX_VALUE))
+                        .addComponent(itemPicturePanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        itemPanel.add(itemLeftPanel);
+
+        itemFirstNameLabel.setText("Doe");
+        itemPanel.add(itemFirstNameLabel);
+
+        itemLastNameLabel.setText("John");
+        itemPanel.add(itemLastNameLabel);
+
+        itemEmailLabel.setText("johndoe@gmail.com");
+        itemPanel.add(itemEmailLabel);
+
+        confirmButton.setFont(confirmButton.getFont().deriveFont(confirmButton.getFont().getSize()+2f));
+        confirmButton.setText("Confirmer");
+
+        GroupLayout mainPanelLayout = new GroupLayout(mainPanel);
+        mainPanel.setLayout(mainPanelLayout);
+        mainPanelLayout.setHorizontalGroup(
+                mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addGroup(mainPanelLayout.createSequentialGroup()
+                                                .addComponent(confirmButton, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE)
+                                                .addGap(0, 0, Short.MAX_VALUE))
+                                        .addComponent(headerPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(itemPanel, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 775, Short.MAX_VALUE))
+                                .addContainerGap())
+        );
+        mainPanelLayout.setVerticalGroup(
+                mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(headerPanel, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(itemPanel, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(confirmButton, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(409, Short.MAX_VALUE))
+        );
+
+        jScrollPane.setViewportView(mainPanel);
+
+        add(jScrollPane, BorderLayout.CENTER);
+    }
+}

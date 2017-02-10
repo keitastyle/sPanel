@@ -1,0 +1,66 @@
+package com.spanel.views;
+
+import com.spanel.views.allocation.Main;
+
+import javax.swing.*;
+import java.awt.*;
+
+/**
+ * Created by Joel on 16/12/2016.
+ */
+public class Class extends JPanel{
+    private JTabbedPane mainTabbedPane;
+    private com.spanel.beans.Class classroom;
+    private Layout layout;
+
+    public Class(Layout layout, com.spanel.beans.Class classroom){
+        this.layout=layout;
+        this.classroom= classroom;
+        initComponents();
+        setTabComponents();
+    }
+
+    private void initComponents(){
+        mainTabbedPane = new JTabbedPane();
+
+        setBackground(new Color(255, 255, 255));
+        setLayout(new BorderLayout());
+
+        mainTabbedPane.setBackground(new Color(255, 255, 255));
+        mainTabbedPane.setToolTipText("");
+        mainTabbedPane.setAutoscrolls(true);
+
+        JPanel jPanel;
+        jPanel = new JPanel();
+        jPanel.setBackground(new Color(255, 255, 255));
+
+        GroupLayout jPanelLayout = new GroupLayout(jPanel);
+        jPanel.setLayout(jPanelLayout);
+        jPanelLayout.setHorizontalGroup(
+                jPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGap(0, 806, Short.MAX_VALUE)
+        );
+        jPanelLayout.setVerticalGroup(
+                jPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGap(0, 516, Short.MAX_VALUE)
+        );
+
+        mainTabbedPane.addTab("Annonces", new JPanel());
+        mainTabbedPane.addTab("Emplois du temps", new JPanel());
+        mainTabbedPane.addTab("Examens", new JPanel());
+        mainTabbedPane.addTab("Notes", new JPanel());
+        mainTabbedPane.addTab("Modules", new JPanel());
+        mainTabbedPane.addTab("Etudiants", new JPanel());
+        mainTabbedPane.addTab("Affectations", new JPanel());
+
+        add(mainTabbedPane, BorderLayout.CENTER);
+    }
+
+    public void setTabComponents(){
+        mainTabbedPane.setComponentAt(6, new Main(this));
+    }
+
+    public void setSelectedIndex(int index){
+        mainTabbedPane.setSelectedIndex(index);
+    }
+}

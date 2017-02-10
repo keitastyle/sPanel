@@ -1,0 +1,35 @@
+package com.spanel.views.allocation;
+
+import javax.swing.*;
+import java.awt.*;
+
+/**
+ * Created by Joel on 03/12/2016.
+ */
+public class Main extends JPanel{
+    private javax.swing.JTabbedPane allocationTabbedPane;
+
+    public Main() {
+        initComponents();
+        setTabComponents();
+    }
+    
+    private void initComponents() {
+
+        allocationTabbedPane = new JTabbedPane();
+        allocationTabbedPane.addTab("Etudiants", new JPanel());
+        allocationTabbedPane.addTab("Modules", new JPanel());
+        allocationTabbedPane.addTab("Cours", new JPanel());
+
+        setBackground(Color.WHITE);
+        setLayout(new BorderLayout());
+        add(allocationTabbedPane, BorderLayout.CENTER);
+
+    }
+
+    public void setTabComponents(){
+        allocationTabbedPane.setComponentAt(0, new Students());
+        allocationTabbedPane.setComponentAt(1, new Modules());
+        allocationTabbedPane.setComponentAt(2, new Courses());
+    }
+}

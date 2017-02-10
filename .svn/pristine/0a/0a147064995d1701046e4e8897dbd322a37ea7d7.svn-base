@@ -1,0 +1,182 @@
+package com.spanel.views.announce;
+
+import javax.swing.*;
+
+/**
+ * Created by Joel on 24/11/2016.
+ */
+public class Index extends JPanel {
+    private JButton addButton;
+    private JLabel authorLabel;
+    private JPanel bottomPanel;
+    private JLabel dateLabel;
+    private JTextArea descripiotnTextArea;
+    private JScrollPane descriptionScrollPane;
+    private JButton editButton;
+    private JPanel itemPanel;
+    private JPanel itemsContainerPanel;
+    private JPanel jPanel6;
+    private JPanel jPanel7;
+    private JScrollPane jScrollPane;
+    private JPanel mainPanel;
+    private JLabel titleLabel;
+    private JLabel typeLabel;
+
+    public Index() {
+        initComponents();
+    }
+
+    private void initComponents() {
+
+        jScrollPane = new JScrollPane();
+        mainPanel = new JPanel();
+        itemsContainerPanel = new JPanel();
+        itemPanel = new JPanel();
+        typeLabel = new JLabel();
+        titleLabel = new JLabel();
+        dateLabel = new JLabel();
+        authorLabel = new JLabel();
+        descriptionScrollPane = new JScrollPane();
+        descripiotnTextArea = new JTextArea();
+        editButton = new JButton();
+        jPanel6 = new JPanel();
+        jPanel7 = new JPanel();
+        bottomPanel = new JPanel();
+        addButton = new JButton();
+
+        setBackground(new java.awt.Color(255, 255, 255));
+        setPreferredSize(new java.awt.Dimension(770, 520));
+        setLayout(new java.awt.BorderLayout());
+
+        jScrollPane.setBorder(null);
+
+        mainPanel.setBackground(new java.awt.Color(255, 255, 255));
+
+        itemsContainerPanel.setBackground(new java.awt.Color(255, 255, 255));
+        itemsContainerPanel.setPreferredSize(new java.awt.Dimension(750, 0));
+        itemsContainerPanel.setLayout(new java.awt.GridLayout(1, 3, 10, 10));
+
+        itemPanel.setPreferredSize(new java.awt.Dimension(0, 100));
+
+        typeLabel.setFont(typeLabel.getFont().deriveFont(typeLabel.getFont().getStyle() | java.awt.Font.BOLD));
+        typeLabel.setText("Rattrapage de cours");
+
+        titleLabel.setFont(titleLabel.getFont().deriveFont(titleLabel.getFont().getSize()+2f));
+        titleLabel.setText("Cours d'analyse lexicale");
+
+        dateLabel.setForeground(new java.awt.Color(0, 102, 204));
+        dateLabel.setText("20/12/2016");
+
+        authorLabel.setText("Mr. Administration");
+
+        descriptionScrollPane.setBorder(null);
+
+        descripiotnTextArea.setEditable(false);
+        descripiotnTextArea.setBackground(new java.awt.Color(240, 240, 240));
+        descripiotnTextArea.setColumns(20);
+        descripiotnTextArea.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        descripiotnTextArea.setLineWrap(true);
+        descripiotnTextArea.setRows(5);
+        descripiotnTextArea.setText("Madame Boushiki annonce que la scéance du Mardi de ... à est reporté au ... de ... à ...");
+        descripiotnTextArea.setFocusable(false);
+        descriptionScrollPane.setViewportView(descripiotnTextArea);
+
+        editButton.setText("Modifier");
+
+        GroupLayout itemPanelLayout = new GroupLayout(itemPanel);
+        itemPanel.setLayout(itemPanelLayout);
+        itemPanelLayout.setHorizontalGroup(
+                itemPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(itemPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(itemPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(titleLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(dateLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(descriptionScrollPane)
+                                        .addComponent(authorLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(itemPanelLayout.createSequentialGroup()
+                                                .addComponent(typeLabel, GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(editButton)))
+                                .addContainerGap())
+        );
+        itemPanelLayout.setVerticalGroup(
+                itemPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(itemPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(itemPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                        .addComponent(typeLabel)
+                                        .addComponent(editButton))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(titleLabel)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(dateLabel)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(authorLabel)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(descriptionScrollPane, GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
+                                .addContainerGap())
+        );
+
+        itemsContainerPanel.add(itemPanel);
+
+        jPanel6.setPreferredSize(new java.awt.Dimension(0, 100));
+
+        GroupLayout jPanel6Layout = new GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+                jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGap(0, 243, Short.MAX_VALUE)
+        );
+        jPanel6Layout.setVerticalGroup(
+                jPanel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGap(0, 215, Short.MAX_VALUE)
+        );
+
+        itemsContainerPanel.add(jPanel6);
+
+        jPanel7.setPreferredSize(new java.awt.Dimension(0, 100));
+
+        GroupLayout jPanel7Layout = new GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+                jPanel7Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanel7Layout.setVerticalGroup(
+                jPanel7Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGap(0, 215, Short.MAX_VALUE)
+        );
+
+        itemsContainerPanel.add(jPanel7);
+
+        GroupLayout mainPanelLayout = new GroupLayout(mainPanel);
+        mainPanel.setLayout(mainPanelLayout);
+        mainPanelLayout.setHorizontalGroup(
+                mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(itemsContainerPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addContainerGap())
+        );
+        mainPanelLayout.setVerticalGroup(
+                mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(itemsContainerPanel, GroupLayout.PREFERRED_SIZE, 215, GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(251, Short.MAX_VALUE))
+        );
+
+        jScrollPane.setViewportView(mainPanel);
+
+        add(jScrollPane, java.awt.BorderLayout.CENTER);
+
+        bottomPanel.setBackground(new java.awt.Color(255, 255, 255));
+        bottomPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 15, 10));
+
+        addButton.setText("Ajouter");
+        bottomPanel.add(addButton);
+
+        add(bottomPanel, java.awt.BorderLayout.PAGE_END);
+    }
+}

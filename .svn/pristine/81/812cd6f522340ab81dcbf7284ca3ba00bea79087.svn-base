@@ -1,0 +1,4 @@
+url = jdbc:mysql://localhost:3306/spanel
+driver = com.mysql.jdbc.Driver
+username = root
+password = u-admin

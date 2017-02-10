@@ -1,0 +1,125 @@
+package com.spanel.views.dialog;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+/**
+ * Created by Joel on 02/12/2016.
+ */
+public class Error extends JDialog{
+    private JLabel errorLabel;
+    private JTextArea errorText;
+    private JScrollPane errorTextScrollPane;
+    private JSeparator jSeparator;
+    private JPanel mainPanel;
+    private JPanel messagePanel;
+    private JButton okButton;
+    private JPanel optionPanel;
+
+    public Error(Frame parent, boolean modal, java.util.List<String> errors) {
+        super(parent, "Erreur", modal);
+        try {
+            UIManager.setLookAndFeel(
+                    UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Error.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Error.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Error.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Error.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+
+        initComponents();
+        for(String e: errors){
+            errorText.append("   •   "+e);
+        }
+        setVisible(true);
+    }
+    
+    private void initComponents(){
+
+        mainPanel = new JPanel();
+        optionPanel = new JPanel();
+        okButton = new JButton();
+        messagePanel = new JPanel();
+        errorLabel = new JLabel();
+        jSeparator = new JSeparator();
+        errorTextScrollPane = new JScrollPane();
+        errorText = new JTextArea();
+
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
+        mainPanel.setLayout(new BorderLayout());
+
+        optionPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+
+        okButton.setText("Ok");
+        okButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                okButtonActionPerformed(evt);
+            }
+        });
+        optionPanel.add(okButton);
+
+        mainPanel.add(optionPanel, BorderLayout.PAGE_END);
+
+        errorLabel.setBackground(new Color(255, 0, 51));
+        errorLabel.setFont(new Font("Calibri Light", 0, 18)); // NOI18N
+        errorLabel.setForeground(new Color(204, 0, 0));
+        errorLabel.setText("Certaines erreurs sont survenues");
+
+        jSeparator.setForeground(new Color(204, 204, 204));
+
+        errorTextScrollPane.setBorder(null);
+
+        errorText.setEditable(false);
+        errorText.setBackground(new Color(240, 240, 240));
+        errorText.setColumns(20);
+        errorText.setFont(new Font("Calibri", 0, 14)); // NOI18N
+        errorText.setLineWrap(true);
+        errorText.setRows(5);
+        errorText.setWrapStyleWord(true);
+        errorText.setBorder(null);
+        errorTextScrollPane.setViewportView(errorText);
+
+        GroupLayout messagePanelLayout = new GroupLayout(messagePanel);
+        messagePanel.setLayout(messagePanelLayout);
+        messagePanelLayout.setHorizontalGroup(
+                messagePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(GroupLayout.Alignment.TRAILING, messagePanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(messagePanelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                        .addComponent(errorTextScrollPane)
+                                        .addComponent(jSeparator, GroupLayout.Alignment.LEADING)
+                                        .addGroup(GroupLayout.Alignment.LEADING, messagePanelLayout.createSequentialGroup()
+                                                .addComponent(errorLabel)
+                                                .addGap(0, 218, Short.MAX_VALUE)))
+                                .addContainerGap())
+        );
+        messagePanelLayout.setVerticalGroup(
+                messagePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(messagePanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(errorLabel)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jSeparator, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(errorTextScrollPane, GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)
+                                .addContainerGap())
+        );
+
+        mainPanel.add(messagePanel, BorderLayout.CENTER);
+
+        getContentPane().add(mainPanel, BorderLayout.CENTER);
+
+        pack();
+    }
+
+    private void okButtonActionPerformed(ActionEvent evt) {
+        dispose();
+    }
+
+}

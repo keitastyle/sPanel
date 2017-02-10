@@ -1,0 +1,14 @@
+package com.spanel.dao;
+
+import com.spanel.beans.Course;
+
+/**
+ * Created by koyre on 12/5/16.
+ */
+public interface CourseDAO {
+
+    void create (Course course) throws DAOException;
+    Course find (Long id ) throws DAOException;
+
+
+}

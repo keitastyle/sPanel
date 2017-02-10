@@ -1,0 +1,21 @@
+package com.spanel.dao;
+
+import com.spanel.beans.Department;
+
+import java.util.List;
+
+/**
+ * Created by koria on 07/12/2016.
+ */
+public interface DepartmentDAO {
+    Department create(Department departement) throws DAOException;
+
+    void update(Long id) throws DAOException;
+
+    Department find(Long id) throws DAOException;
+
+    Department findByName(String name) throws  DAOException;
+
+    List<Department> findAll() throws DAOException;
+
+}

@@ -1,0 +1,153 @@
+package com.spanel.views.allocation;
+
+import com.spanel.app.Request;
+import com.spanel.beans.Class;
+import com.spanel.beans.Module;
+import com.spanel.beans.User;
+import com.spanel.controllers.ModuleController;
+import com.spanel.forms.ModuleAllocationForm;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+/**
+ * Created by Joel on 03/12/2016.
+ */
+public class Modules extends JPanel{
+    private JButton confirmButton;
+    private JPanel formPanel;
+    private JLabel gapLabel;
+    private JScrollPane jScrollPane;
+    private JPanel leftPanel;
+    private JPanel mainPanel;
+    private JComboBox<String> moduleComboBox;
+    private JLabel moduleLabel;
+    private JComboBox<String> professorComboBox;
+    private JLabel professorLabel;
+    private JPanel rightPanel;
+
+    private Index index;
+
+    public Modules(Index index, java.util.List<Module> modules, java.util.List<User> professors) {
+        this.index = index;
+        setBackground(Color.WHITE);
+
+        initComponents();
+
+        String professorsList[] = new String[professors.size()];
+        for(int i =0; i<professors.size(); i++){
+            professorsList[i] = professors.get(i).getFirstName() + " " + professors.get(i).getLastName();
+        }
+        professorComboBox.setModel(new DefaultComboBoxModel<>(professorsList));
+
+        String modulesList[] = new String[modules.size()];
+        for(int i =0; i<modules.size(); i++){
+            modulesList[i] = modules.get(i).getName();
+        }
+        moduleComboBox.setModel(new DefaultComboBoxModel<>(modulesList));
+
+
+    }
+
+    public void allocateModule(ActionEvent event){
+        Request request = new Request(index.getClassIndex().getAppLayout(), index.getMain());
+        request.addField(ModuleAllocationForm.MODULE_NAME_FIELD, (String) moduleComboBox.getSelectedItem());
+        request.addField(ModuleAllocationForm.PROFESSOR_NAME_FIELD, (String) professorComboBox.getSelectedItem());
+        request.addField(ModuleAllocationForm.CLASS_ID_FIELD, Long.toString(getClassroom().getId()));
+
+        if(ModuleController.allocate(request)){
+            index.setTabComponents();
+            index.goToTab(1);
+            index.getClassIndex().setTabComponents(4);
+        }
+    }
+
+    private void initComponents() {
+
+        jScrollPane = new JScrollPane();
+        mainPanel = new JPanel();
+        leftPanel = new JPanel();
+        formPanel = new JPanel();
+        moduleLabel = new JLabel();
+        moduleComboBox = new JComboBox<>();
+        professorLabel = new JLabel();
+        professorComboBox = new JComboBox<>();
+        gapLabel = new JLabel();
+        confirmButton = new JButton();
+        rightPanel = new JPanel();
+
+        setLayout(new BorderLayout());
+
+        jScrollPane.setBorder(null);
+        jScrollPane.setPreferredSize(new Dimension(770, 520));
+
+        mainPanel.setBackground(new Color(255, 255, 255));
+        mainPanel.setPreferredSize(new Dimension(770, 520));
+        mainPanel.setLayout(new GridLayout(1, 2));
+
+        formPanel.setBackground(new Color(255, 255, 255));
+        formPanel.setLayout(new GridLayout(3, 2, 0, 15));
+
+        moduleLabel.setText("Module :");
+        formPanel.add(moduleLabel);
+
+        formPanel.add(moduleComboBox);
+
+        professorLabel.setText("Responsable :");
+        formPanel.add(professorLabel);
+
+        formPanel.add(professorComboBox);
+        formPanel.add(gapLabel);
+
+        confirmButton.setText("Confirmer");
+        confirmButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                allocateModule(e);
+            }
+        });
+        formPanel.add(confirmButton);
+
+        leftPanel.setBackground(new Color(255, 255, 255));
+        GroupLayout leftPanelLayout = new GroupLayout(leftPanel);
+        leftPanel.setLayout(leftPanelLayout);
+        leftPanelLayout.setHorizontalGroup(
+                leftPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(leftPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(formPanel, GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
+                                .addContainerGap())
+        );
+        leftPanelLayout.setVerticalGroup(
+                leftPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(leftPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(formPanel, GroupLayout.PREFERRED_SIZE, 123, GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(386, Short.MAX_VALUE))
+        );
+
+        mainPanel.add(leftPanel);
+
+        rightPanel.setBackground(new Color(255, 255, 255));
+        GroupLayout rightPanelLayout = new GroupLayout(rightPanel);
+        rightPanel.setLayout(rightPanelLayout);
+        rightPanelLayout.setHorizontalGroup(
+                rightPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGap(0, 385, Short.MAX_VALUE)
+        );
+        rightPanelLayout.setVerticalGroup(
+                rightPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGap(0, 520, Short.MAX_VALUE)
+        );
+
+        mainPanel.add(rightPanel);
+
+        jScrollPane.setViewportView(mainPanel);
+
+        add(jScrollPane, BorderLayout.CENTER);
+    }
+
+    private Class getClassroom(){ return index.getClassroom();}
+}

@@ -1,0 +1,14 @@
+package com.spanel;
+
+import com.spanel.views.Layout;
+import com.spanel.views.auth.Login;
+
+/**
+ * Created by Joel on 30/11/2016.
+ */
+public class Main {
+    public static void main(String args[]){
+        // new Login().setVisible(true);
+        new Layout().setVisible(true);
+    }
+}

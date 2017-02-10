@@ -1,0 +1,387 @@
+-- phpMyAdmin SQL Dump
+-- version 4.1.4
+-- http://www.phpmyadmin.net
+--
+-- Client :  127.0.0.1
+-- Généré le :  Jeu 05 Janvier 2017 à 17:59
+-- Version du serveur :  5.6.15-log
+-- Version de PHP :  5.6.17
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+--
+-- Base de données :  `spanel`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `administrators`
+--
+
+CREATE TABLE IF NOT EXISTS `administrators` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `function` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+
+--
+-- Contenu de la table `administrators`
+--
+
+INSERT INTO `administrators` (`id`, `function`) VALUES
+(1, 'testeur');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `affectations`
+--
+
+CREATE TABLE IF NOT EXISTS `affectations` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `professor_id` int(10) unsigned NOT NULL,
+  `class_module_id` int(10) unsigned NOT NULL,
+  `course_id` int(10) unsigned NOT NULL,
+  `hours` int(11) NOT NULL,
+  `coefficient` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `class_module_id` (`class_module_id`,`course_id`,`professor_id`),
+  KEY `professor_id` (`professor_id`,`class_module_id`,`course_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
+
+--
+-- Contenu de la table `affectations`
+--
+
+INSERT INTO `affectations` (`id`, `professor_id`, `class_module_id`, `course_id`, `hours`, `coefficient`) VALUES
+(1, 2, 1, 1, 46, 50),
+(2, 2, 1, 2, 30, 50),
+(3, 2, 2, 3, 30, 30),
+(4, 2, 2, 4, 50, 70);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `affectation_file`
+--
+
+CREATE TABLE IF NOT EXISTS `affectation_file` (
+  `id` int(10) unsigned NOT NULL,
+  `affectation_id` int(10) unsigned NOT NULL,
+  `file_id` int(10) unsigned NOT NULL,
+  `type` varchar(100) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `announces`
+--
+
+CREATE TABLE IF NOT EXISTS `announces` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `class_id` int(10) unsigned NOT NULL,
+  `author_id` int(10) unsigned NOT NULL,
+  `title` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `type` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `description` text COLLATE utf8_unicode_ci NOT NULL,
+  `date` date NOT NULL,
+  `expiration_date` date NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `class_id` (`class_id`,`author_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `classes`
+--
+
+CREATE TABLE IF NOT EXISTS `classes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `department_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `departement_id` (`department_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
+
+--
+-- Contenu de la table `classes`
+--
+
+INSERT INTO `classes` (`id`, `name`, `department_id`) VALUES
+(1, 'Classe 1', 1),
+(2, 'Classe 2', 1),
+(3, 'Classe 3', 1),
+(4, 'Classe 4', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `class_module`
+--
+
+CREATE TABLE IF NOT EXISTS `class_module` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `class_id` int(10) unsigned NOT NULL,
+  `module_id` int(10) unsigned NOT NULL,
+  `responsable_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `class_id_2` (`class_id`,`module_id`),
+  KEY `class_id` (`class_id`,`module_id`,`responsable_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+
+--
+-- Contenu de la table `class_module`
+--
+
+INSERT INTO `class_module` (`id`, `class_id`, `module_id`, `responsable_id`) VALUES
+(1, 1, 1, 2),
+(2, 1, 2, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `courses`
+--
+
+CREATE TABLE IF NOT EXISTS `courses` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
+
+--
+-- Contenu de la table `courses`
+--
+
+INSERT INTO `courses` (`id`, `name`) VALUES
+(1, 'Matière 1'),
+(2, 'Matière 2'),
+(3, 'Matière 3'),
+(4, 'Matière 4');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `departments`
+--
+
+CREATE TABLE IF NOT EXISTS `departments` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=10 ;
+
+--
+-- Contenu de la table `departments`
+--
+
+INSERT INTO `departments` (`id`, `name`) VALUES
+(1, 'Génie Informatique'),
+(2, 'Génie Civil'),
+(3, 'Génie Mécanique'),
+(4, 'Génie Minéral'),
+(5, 'Génie Electrique'),
+(6, 'Génie RT'),
+(7, 'Génie MIS'),
+(8, 'Génie Procédé'),
+(9, 'Génie Industriel');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `exams`
+--
+
+CREATE TABLE IF NOT EXISTS `exams` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `affectation_id` int(10) unsigned NOT NULL,
+  `date` datetime NOT NULL,
+  `type` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `room` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `description` text COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `affectation_id` (`affectation_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=12 ;
+
+--
+-- Contenu de la table `exams`
+--
+
+INSERT INTO `exams` (`id`, `affectation_id`, `date`, `type`, `room`, `description`) VALUES
+(9, 3, '2017-11-12 08:00:00', 'Examen', 'IFC', 'Veuillez vous munir de vos PC'),
+(7, 1, '2017-11-11 08:00:00', 'Examen', 'efr', 'fdg'),
+(8, 1, '2017-03-12 08:00:00', 'Examen', 'IFC1', 'Veillez vous munir du matériel necessaire'),
+(10, 4, '2017-01-04 08:00:00', 'Controle', 'IF1', 'Rien à dire'),
+(11, 1, '2017-12-10 08:00:00', 'Examen', 'IFC', 'TEst');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `files`
+--
+
+CREATE TABLE IF NOT EXISTS `files` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `author_id` int(10) unsigned NOT NULL,
+  `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `path` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `type` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `description` text COLLATE utf8_unicode_ci,
+  `date` date NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `marks`
+--
+
+CREATE TABLE IF NOT EXISTS `marks` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `exam_id` int(10) unsigned NOT NULL,
+  `student_id` int(10) unsigned NOT NULL,
+  `value` float NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `exam_id` (`exam_id`,`student_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `modules`
+--
+
+CREATE TABLE IF NOT EXISTS `modules` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
+
+--
+-- Contenu de la table `modules`
+--
+
+INSERT INTO `modules` (`id`, `name`) VALUES
+(1, 'Module 1'),
+(2, 'Module 2'),
+(3, 'Module 3');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `notifications`
+--
+
+CREATE TABLE IF NOT EXISTS `notifications` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `link` int(11) NOT NULL,
+  `text` int(11) NOT NULL,
+  `image` int(11) NOT NULL,
+  `created_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `professors`
+--
+
+CREATE TABLE IF NOT EXISTS `professors` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `department_id` int(10) unsigned NOT NULL,
+  `grade` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `departement_id` (`department_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+
+--
+-- Contenu de la table `professors`
+--
+
+INSERT INTO `professors` (`id`, `department_id`, `grade`) VALUES
+(2, 6, 'Dr.');
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `schedules`
+--
+
+CREATE TABLE IF NOT EXISTS `schedules` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `class_id` int(10) unsigned NOT NULL,
+  `file_id` int(10) unsigned NOT NULL,
+  `date` date NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `class_id` (`class_id`,`file_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `students`
+--
+
+CREATE TABLE IF NOT EXISTS `students` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `student_id` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `class_id` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `student_id` (`student_id`,`class_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=7 ;
+
+--
+-- Contenu de la table `students`
+--
+
+INSERT INTO `students` (`id`, `student_id`, `class_id`) VALUES
+(5, '50091', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `users`
+--
+
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `last_name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `phone` int(11) NOT NULL,
+  `password` varchar(56) COLLATE utf8_unicode_ci NOT NULL,
+  `userable_id` int(10) unsigned DEFAULT NULL,
+  `userable_type` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id` (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=10 ;
+
+--
+-- Contenu de la table `users`
+--
+
+INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `phone`, `password`, `userable_id`, `userable_type`) VALUES
+(1, 'admin', 'test', 'admin@spanel.com', 681997669, 'rpRnElxn8EWL07pAjXrrZWkSH6XlkZB6+LFf6FeH2/SaZ3i5Ub6mVg==', 1, 'administrators'),
+(6, 'Joel', 'Tankam', 'j.tankam@yahoo.fr', 681997669, 'dFlQssDimbpmmQbYTi8v/m4cCq3kx6vYadDaY2wK/p6tWOhDbjnDTQ==', 5, 'students'),
+(9, 'Test', 'Professeur', 'test@prof.com', 681997670, '6AMp3i3IBSbyXmW1X2OkPbsF3cI/9wR8tQbqD2ey2xpp1i0HhGeNWQ==', 2, 'professors');
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

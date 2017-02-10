@@ -1,0 +1,41 @@
+package com.spanel.forms;
+
+import com.spanel.app.Request;
+import com.spanel.beans.Student;
+import com.spanel.dao.ClassDAO;
+import com.spanel.dao.StudentDAO;
+import com.spanel.dao.UserDAO;
+
+/**
+ * Created by koria on 13/12/2016.
+ */
+public class StudentForm extends Form {
+    private StudentDAO studentDAO;
+    private UserDAO userDAO;
+    private ClassDAO classDAO;
+    public static String CLASS_NAME_FIELD="name";
+    public static String STUDENT_EMAIL = "student";
+    public StudentForm(StudentDAO studentDAO,UserDAO userDAO,ClassDAO classDAO){
+        this.studentDAO=studentDAO;
+        this.userDAO = userDAO;
+        this.classDAO=classDAO;
+    }
+    public StudentForm(StudentDAO studentDAO){
+        this.studentDAO=studentDAO;
+    }
+    public void update(Request request){
+        String classe = request.getFieldValue(CLASS_NAME_FIELD);
+        String email = request.getFieldValue(STUDENT_EMAIL);
+        Long classId = classDAO.findByName(classe).getId();
+        Long studentId = userDAO.find(email).getUserableId();
+        Student student = new Student();
+        student.setId(studentId);
+        student.setClassId(classId);
+        studentDAO.update(student);
+
+    }
+
+
+
+
+}

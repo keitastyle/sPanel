@@ -1,0 +1,30 @@
+package com.spanel.dao;
+
+import com.spanel.beans.Class;
+import com.spanel.beans.Exam;
+import com.spanel.beans.Professor;
+
+import java.sql.Timestamp;
+import java.util.List;
+
+
+/**
+ * Created by Joel on 02/01/2017.
+ */
+public interface ExamDAO {
+    void create(Exam exam) throws DAOException;
+
+    void update(Exam exam) throws DAOException;
+
+    Exam find (Long id) throws DAOException;
+
+    Exam find(Long ClassId, Timestamp date) throws DAOException;
+
+    List<Exam> findAll(Class classroom) throws DAOException;
+
+    List<Exam> findAll(Class classroom, Professor professor) throws DAOException;
+
+    List<Exam> findAllWithoutResults(Class classroom, Professor professor) throws DAOException;
+
+    List<Exam> findAllWithResults(Class classroom) throws DAOException;
+}

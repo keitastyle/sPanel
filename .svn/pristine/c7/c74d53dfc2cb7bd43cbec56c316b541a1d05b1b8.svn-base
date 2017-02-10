@@ -1,0 +1,60 @@
+package com.spanel.views.allocation;
+
+import com.spanel.App;
+import com.spanel.dao.UserDAO;
+import com.spanel.views.Class;
+
+import javax.swing.*;
+import java.awt.*;
+
+/**
+ * Created by Joel on 03/12/2016.
+ */
+public class Main extends JPanel{
+    private Class classrom;
+
+    public void setClassrom(Class classrom) {
+        this.classrom = classrom;
+    }
+
+    public Class getClassrom() {
+        return classrom;
+    }
+
+    public com.spanel.beans.Class getClassBean(){
+        return classrom.getClassBean();
+    }
+
+    private javax.swing.JTabbedPane allocationTabbedPane;
+
+    public Main(Class classroom){
+        this.classrom = classroom;
+        initComponents();
+        setTabComponents();
+    }
+    public App getMain() {
+        return classrom.getMain();
+    }
+    
+    private void initComponents() {
+
+        allocationTabbedPane = new JTabbedPane();
+        allocationTabbedPane.addTab("Etudiants", new JPanel());
+        allocationTabbedPane.addTab("Modules", new JPanel());
+        allocationTabbedPane.addTab("Cours", new JPanel());
+
+        setBackground(Color.WHITE);
+        setLayout(new BorderLayout());
+        add(allocationTabbedPane, BorderLayout.CENTER);
+
+    }
+
+    public void setTabComponents(){
+        UserDAO userDAO = getMain().getDaoFactory().getUserDao();
+
+        allocationTabbedPane.setComponentAt(0, new Students(this, userDAO.findNonAffectedStudents()));
+        allocationTabbedPane.setComponentAt(1, new Modules());
+        allocationTabbedPane.setComponentAt(2, new Courses());
+    }
+
+}

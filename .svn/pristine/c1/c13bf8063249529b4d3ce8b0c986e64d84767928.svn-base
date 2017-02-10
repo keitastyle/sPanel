@@ -1,0 +1,15 @@
+package com.spanel.dao;
+
+import com.spanel.beans.Exam;
+
+import java.sql.Timestamp;
+
+
+/**
+ * Created by Joel on 02/01/2017.
+ */
+public interface ExamDAO {
+    void create(Exam exam) throws DAOException;
+
+    Exam find(Long ClassId, Timestamp date) throws DAOException;
+}

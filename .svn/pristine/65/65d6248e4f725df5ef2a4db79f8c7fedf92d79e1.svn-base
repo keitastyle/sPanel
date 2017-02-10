@@ -1,0 +1,37 @@
+package com.spanel.controllers;
+
+import com.spanel.App;
+import com.spanel.app.Request;
+import com.spanel.beans.Module;
+import com.spanel.dao.DAOConfigurationException;
+import com.spanel.dao.DAOFactory;
+import com.spanel.dao.ModuleDAO;
+import com.spanel.dao.ModuleDAOImpl;
+import com.spanel.forms.ModuleForm;
+
+/**
+ * Created by koria on 04/12/2016.
+ */
+public class ModuleController {
+    private ModuleDAO moduleDAO;
+
+    ModuleController(DAOFactory daoFactory) {moduleDAO=daoFactory.getModuleDao();}
+
+    public static boolean create(Request request){
+        ModuleController controller=new ModuleController(request.getMain().getDaoFactory());
+        ModuleForm form = new ModuleForm(controller.moduleDAO);
+        form.create(request);
+
+        if(form.hasErrors()){
+            new com.spanel.views.dialog.Error(request.getParent(), true, form.getErrors());
+            return false;
+        }
+
+        return true;
+    }
+}
+
+
+
+
+

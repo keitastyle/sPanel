@@ -1,0 +1,214 @@
+package com.spanel.views.exam;
+
+import com.spanel.beans.Affectation;
+import com.spanel.beans.Course;
+import com.spanel.beans.Professor;
+import com.spanel.beans.User;
+import com.spanel.dao.AffectationDAO;
+import com.spanel.dao.CourseDAO;
+import com.spanel.dao.DAOFactory;
+import com.spanel.views.ClassIndex;
+
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by Joel on 24/11/2016.
+ */
+public class Index extends JPanel {
+    private JButton addButton;
+    private JPanel bottomPanel;
+    private JPanel centerPanel;
+    private JLabel comingLabel;
+    private JLabel courseLabel;
+    private JLabel dateLabel;
+    private JPanel headerPanel;
+    private JLabel hoursLabel;
+    private JPanel itemsContainerPanel;
+    private JScrollPane jScrollPane;
+    private JPanel mainPanel;
+    private JLabel roomLabel;
+
+    private ClassIndex classIndex;
+
+    public Index(ClassIndex classIndex) {
+        this.classIndex = classIndex;
+        initComponents();
+
+        itemsContainerPanel.setLayout(new java.awt.GridLayout(2,1, 0, 10));
+        itemsContainerPanel.add(composeItem());
+        itemsContainerPanel.add(composeItem());
+    }
+
+    private void initComponents() {
+        centerPanel = new JPanel();
+        jScrollPane = new JScrollPane();
+        mainPanel = new JPanel();
+        comingLabel = new JLabel();
+        headerPanel = new JPanel();
+        courseLabel = new JLabel();
+        hoursLabel = new JLabel();
+        dateLabel = new JLabel();
+        roomLabel = new JLabel();
+        itemsContainerPanel = new JPanel();
+
+        bottomPanel = new JPanel();
+        addButton = new JButton();
+
+        User user = classIndex.getMain().getUser();
+
+        setBackground(new java.awt.Color(255, 255, 255));
+        setLayout(new java.awt.BorderLayout());
+
+        centerPanel.setBackground(new java.awt.Color(255, 255, 255));
+        centerPanel.setLayout(new java.awt.BorderLayout());
+
+        jScrollPane.setBorder(null);
+
+        mainPanel.setBackground(new java.awt.Color(255, 255, 255));
+
+        comingLabel.setFont(comingLabel.getFont().deriveFont(comingLabel.getFont().getSize()+3f));
+        comingLabel.setForeground(new java.awt.Color(0, 102, 153));
+        comingLabel.setText("A venir");
+
+        headerPanel.setBackground(new java.awt.Color(255, 255, 255));
+        headerPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(204, 204, 204)));
+        headerPanel.setLayout(new java.awt.GridLayout());
+
+        courseLabel.setFont(courseLabel.getFont().deriveFont(courseLabel.getFont().getStyle() | java.awt.Font.BOLD, courseLabel.getFont().getSize()+2));
+        courseLabel.setText("Matière");
+        headerPanel.add(courseLabel);
+
+        hoursLabel.setFont(hoursLabel.getFont().deriveFont(hoursLabel.getFont().getStyle() | java.awt.Font.BOLD, hoursLabel.getFont().getSize()+2));
+        hoursLabel.setText("Heure");
+        headerPanel.add(hoursLabel);
+
+        dateLabel.setFont(dateLabel.getFont().deriveFont(dateLabel.getFont().getStyle() | java.awt.Font.BOLD, dateLabel.getFont().getSize()+2));
+        dateLabel.setText("Date");
+        headerPanel.add(dateLabel);
+
+        roomLabel.setFont(roomLabel.getFont().deriveFont(roomLabel.getFont().getStyle() | java.awt.Font.BOLD, roomLabel.getFont().getSize()+2));
+        roomLabel.setText("Salle");
+        headerPanel.add(roomLabel);
+
+        itemsContainerPanel.setBackground(new java.awt.Color(255, 255, 255));
+
+        GroupLayout mainPanelLayout = new GroupLayout(mainPanel);
+        mainPanel.setLayout(mainPanelLayout);
+        mainPanelLayout.setHorizontalGroup(
+                mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(itemsContainerPanel, GroupLayout.DEFAULT_SIZE, 750, Short.MAX_VALUE)
+                                        .addComponent(headerPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(mainPanelLayout.createSequentialGroup()
+                                                .addComponent(comingLabel)
+                                                .addGap(0, 0, Short.MAX_VALUE)))
+                                .addContainerGap())
+        );
+        mainPanelLayout.setVerticalGroup(
+                mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(comingLabel)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(headerPanel, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(itemsContainerPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(361, Short.MAX_VALUE))
+        );
+
+        jScrollPane.setViewportView(mainPanel);
+
+        centerPanel.add(jScrollPane, java.awt.BorderLayout.CENTER);
+
+        add(centerPanel, java.awt.BorderLayout.CENTER);
+
+
+        bottomPanel.setBackground(new java.awt.Color(255, 255, 255));
+        bottomPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 15, 10));
+
+        addButton.setText("Ajouter");
+        addButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addButtonActionPerformed(evt);
+            }
+        });
+        bottomPanel.add(addButton);
+
+        //if(user.isProfessor())
+            add(bottomPanel, java.awt.BorderLayout.PAGE_END);
+    }
+
+    private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        User user = classIndex.getMain().getUser();
+        DAOFactory daoFactory = classIndex.getMain().getDaoFactory();
+        AffectationDAO affectationDAO = daoFactory.getAffectationDao();
+        CourseDAO courseDAO = daoFactory.getCourseDao();
+        List<Affectation> affectations = affectationDAO.findAll((Professor) user.getUserable(daoFactory), classIndex.getClassroom());
+        List<Course> courses = new ArrayList<>();
+        for(Affectation a : affectations){
+            courses.add(courseDAO.find(a.getCourseId()));
+        }
+        new Create(this, true, courses );
+    }
+
+    public JPanel composeItem(){
+        JPanel itemAttributesPanel;
+        JLabel itemCourseLabel;
+        JLabel itemDateLabel;
+        JLabel itemDescriptionLabel;
+        JPanel itemDescriptionPanel;
+        JLabel itemHoursLabel;
+        JPanel itemPanel;
+        JLabel itemRoomLabel;
+
+        itemPanel = new JPanel();
+        itemAttributesPanel = new JPanel();
+        itemCourseLabel = new JLabel();
+        itemHoursLabel = new JLabel();
+        itemDateLabel = new JLabel();
+        itemRoomLabel = new JLabel();
+        itemDescriptionPanel = new JPanel();
+        itemDescriptionLabel = new JLabel();
+
+        itemPanel.setBackground(new java.awt.Color(255, 255, 255));
+        itemPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(204, 204, 204)));
+        itemPanel.setLayout(new BoxLayout(itemPanel, BoxLayout.Y_AXIS));
+
+        itemAttributesPanel.setBackground(new java.awt.Color(255, 255, 255));
+        itemAttributesPanel.setLayout(new java.awt.GridLayout());
+
+        itemCourseLabel.setFont(itemCourseLabel.getFont().deriveFont(itemCourseLabel.getFont().getStyle() | java.awt.Font.BOLD));
+        itemCourseLabel.setText("Analyse Lexicale");
+        itemAttributesPanel.add(itemCourseLabel);
+
+        itemHoursLabel.setText("8:00");
+        itemAttributesPanel.add(itemHoursLabel);
+
+        itemDateLabel.setText("25/12/2016");
+        itemAttributesPanel.add(itemDateLabel);
+
+        itemRoomLabel.setForeground(new java.awt.Color(0, 102, 153));
+        itemRoomLabel.setText("IFC");
+        itemAttributesPanel.add(itemRoomLabel);
+
+        itemPanel.add(itemAttributesPanel);
+
+        itemDescriptionPanel.setBackground(new java.awt.Color(255, 255, 255));
+        itemDescriptionPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 6));
+
+        itemDescriptionLabel.setText("L'examen est individuelle. Chaque étudiant doit être munis de son PC. Bonne révision");
+        itemDescriptionPanel.add(itemDescriptionLabel);
+
+        itemPanel.add(itemDescriptionPanel);
+
+        return itemPanel;
+    }
+
+    public ClassIndex getClassIndex() {
+        return classIndex;
+    }
+}

@@ -1,0 +1,456 @@
+package com.spanel.views.auth;
+
+import com.spanel.App;
+import com.spanel.app.Request;
+import com.spanel.controllers.AuthController;
+import com.spanel.forms.InscriptionForm;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+/**
+ * Created by Joel on 25/11/2016.
+ */
+public class Registration extends JFrame {
+    private App main;
+
+    private JPasswordField passwordConfirmationField;
+    private JLabel registrationLabel;
+    private JLabel alreadyAccountLabel;
+    private JComboBox<String> departmentComboBox;
+    private JLabel departmentLabel;
+    private JScrollPane descriptionScrollPane;
+    private JTextArea descriptionTextArea;
+    private JTextField emailField;
+    private JLabel emailLabel;
+    private JTextField firstNameField;
+    private JLabel firstNameLabel;
+    private JComboBox<String> gradeComboBox;
+    private JLabel gradeLabel;
+    private JSeparator jSeparator;
+    private JTextField lastNameField;
+    private JLabel lastNameLabel;
+    private JButton registrationButton;
+    private JLabel loginLabel;
+    private JPanel mainPanel;
+    private JLabel passwordConfirmationLabel;
+    private JPasswordField passwordField;
+    private JLabel passwordLabel;
+    private JTextField phoneField;
+    private JLabel phoneLabel;
+    private JButton pictureChoserButton;
+    private JTextField pictureField;
+    private JLabel pictureLabel;
+    private JRadioButton professorRadioButton;
+    private JPanel rightSidePanel;
+    private JRadioButton studentRadioButton;
+    private ButtonGroup userTypeButtonGroup;
+    private JLabel welcomeLabel;
+
+    private Font defaultFont = new Font("Calibri", Font.PLAIN, 14);
+    private Font defaultFontLight = new Font("Calibri Light", Font.PLAIN, 14);
+
+    private final String FRAME_TITLE = "Inscription";
+
+    public Registration(App main) {
+        this.main = main;
+
+        try {
+            UIManager.setLookAndFeel(
+                    UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+
+        setTitle(FRAME_TITLE);
+        initComponents();
+    }
+
+    private void login(MouseEvent evt) {
+        new Login(main).setVisible(true);
+        setVisible(false);
+        dispose();
+    }
+
+    private void register(MouseEvent evt) {
+        Request request = new Request(this, this.main);
+
+        if(studentRadioButton.isSelected()){
+            request.addField(InscriptionForm.TYPE_FIELD, studentRadioButton.getText());
+        }else{
+            request.addField(InscriptionForm.TYPE_FIELD, professorRadioButton.getText());
+        }
+        request.addField(InscriptionForm.FIRST_NAME_FIELD, firstNameField.getText());
+        request.addField(InscriptionForm.LAST_NAME_FIELD, lastNameField.getText());
+        request.addField(InscriptionForm.PICTURE_FIELD, pictureField.getText());
+        request.addField(InscriptionForm.EMAIL_FIELD, emailField.getText());
+        request.addField(InscriptionForm.PHONE_FIELD, phoneField.getText());
+        request.addField(InscriptionForm.GRADE_FIELD, (String) gradeComboBox.getSelectedItem());
+        request.addField(InscriptionForm.DEPARTMENT_FIELD, (String) departmentComboBox.getSelectedItem());
+        request.addField(InscriptionForm.PASSWORD_FIELD, new String(passwordField.getPassword()));
+        request.addField(InscriptionForm.PASSWORD_CONFIRMATION_FIELD, new String(passwordField.getPassword()));
+
+        AuthController.register(request);
+    }
+
+    private void studentRadioButtonActionPerformed(ActionEvent evt) {
+    }
+
+    private void initComponents() {
+
+        userTypeButtonGroup = new ButtonGroup();
+        mainPanel = new JPanel();
+        jSeparator = new JSeparator();
+        welcomeLabel = new JLabel();
+        descriptionScrollPane = new JScrollPane();
+        descriptionTextArea = new JTextArea();
+        rightSidePanel = new JPanel();
+        registrationLabel = new JLabel();
+        alreadyAccountLabel = new JLabel();
+        loginLabel = new JLabel();
+        studentRadioButton = new JRadioButton();
+        professorRadioButton = new JRadioButton();
+        firstNameLabel = new JLabel();
+        firstNameField = new JTextField();
+        lastNameLabel = new JLabel();
+        lastNameField = new JTextField();
+        pictureLabel = new JLabel();
+        pictureField = new JTextField();
+        pictureChoserButton = new JButton();
+        gradeLabel = new JLabel();
+        gradeComboBox = new JComboBox<>();
+        departmentLabel = new JLabel();
+        departmentComboBox = new JComboBox<>();
+        emailLabel = new JLabel();
+        emailField = new JTextField();
+        phoneLabel = new JLabel();
+        phoneField = new JTextField();
+        passwordLabel = new JLabel();
+        passwordField = new JPasswordField();
+        passwordConfirmationLabel = new JLabel();
+        passwordConfirmationField = new JPasswordField();
+        registrationButton = new JButton();
+
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setFont(new Font("Calibri", 0, 14)); 
+        setMaximumSize(new Dimension(1115, 680));
+        setMinimumSize(new Dimension(1024, 680));
+        setResizable(false);
+
+        mainPanel.setBackground(new Color(250, 250, 250));
+        mainPanel.setForeground(new Color(102, 102, 102));
+        mainPanel.setFont(new Font("Calibri", 0, 11)); 
+        mainPanel.setPreferredSize(new Dimension(1024, 680));
+
+        jSeparator.setForeground(new Color(204, 204, 204));
+        jSeparator.setOrientation(SwingConstants.VERTICAL);
+
+        welcomeLabel.setFont(new Font("Calibri", 0, 24)); 
+        welcomeLabel.setForeground(new Color(102, 102, 102));
+        welcomeLabel.setText("Bienvenue sur sPanel");
+
+        descriptionScrollPane.setBorder(null);
+
+        descriptionTextArea.setBackground(new Color(250, 250, 250));
+        descriptionTextArea.setColumns(20);
+        descriptionTextArea.setFont(new Font("Calibri", 0, 14)); 
+        descriptionTextArea.setForeground(new Color(102, 102, 102));
+        descriptionTextArea.setLineWrap(true);
+        descriptionTextArea.setRows(5);
+        descriptionTextArea.setText("sPanel est une plateforme intranet qui a pour but de : \n   •   Centraliser les informations\n   •   Garantir aux étudiants un accès plus simple et plus rapides aux informations\n   •   Permettre aux professeurs et à l’administration de transférer plus rapidement des informations telles que les annonces, les emplois de temps, les programmes d’examens, les notes…etc.\n   •   Garantir l’interconnexion et faciliter les échanges entre l’administration, les étudiants et les professeurs.\n\n");
+        descriptionTextArea.setWrapStyleWord(true);
+        descriptionTextArea.setBorder(null);
+        descriptionTextArea.setFocusable(false);
+        descriptionScrollPane.setViewportView(descriptionTextArea);
+
+        rightSidePanel.setBackground(new Color(255, 255, 255));
+        rightSidePanel.setFont(new Font("Calibri", 0, 14)); 
+        rightSidePanel.setInheritsPopupMenu(true);
+
+        registrationLabel.setFont(new Font("Calibri Light", 0, 24)); 
+        registrationLabel.setForeground(new Color(0, 102, 204));
+        registrationLabel.setText("Inscription");
+
+        alreadyAccountLabel.setFont(new Font("Calibri", 0, 14)); 
+        alreadyAccountLabel.setText("Déjà un compte ? ");
+
+        loginLabel.setFont(new Font("Calibri", 0, 14)); 
+        loginLabel.setForeground(new Color(0, 102, 204));
+        loginLabel.setText("Connexion");
+        loginLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        loginLabel.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent evt) {
+                login(evt);
+            }
+        });
+
+        studentRadioButton.setBackground(new Color(255, 255, 255));
+        userTypeButtonGroup.add(studentRadioButton);
+        studentRadioButton.setFont(new Font("Calibri", 0, 18)); 
+        studentRadioButton.setForeground(new Color(102, 102, 102));
+        studentRadioButton.setSelected(true);
+        studentRadioButton.setText(InscriptionForm.TYPE_STUDENT_VALUE);
+        studentRadioButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                studentRadioButtonActionPerformed(evt);
+            }
+        });
+
+        professorRadioButton.setBackground(new Color(255, 255, 255));
+        userTypeButtonGroup.add(professorRadioButton);
+        professorRadioButton.setFont(new Font("Calibri", 0, 18)); 
+        professorRadioButton.setForeground(new Color(102, 102, 102));
+        professorRadioButton.setText(InscriptionForm.TYPE_PROFESSOR_VALUE);
+
+        firstNameLabel.setFont(new Font("Calibri", 0, 18)); 
+        firstNameLabel.setForeground(new Color(102, 102, 102));
+        firstNameLabel.setText("Prénom");
+
+        firstNameField.setFont(new Font("Calibri", 0, 16)); 
+        firstNameField.setForeground(new Color(102, 102, 102));
+        firstNameField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
+
+        lastNameLabel.setFont(new Font("Calibri", 0, 18)); 
+        lastNameLabel.setForeground(new Color(102, 102, 102));
+        lastNameLabel.setText("Nom");
+
+        lastNameField.setFont(new Font("Calibri", 0, 16)); 
+        lastNameField.setForeground(new Color(102, 102, 102));
+        lastNameField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
+
+        pictureLabel.setFont(new Font("Calibri", 0, 18)); 
+        pictureLabel.setForeground(new Color(102, 102, 102));
+        pictureLabel.setText("Photo");
+
+        pictureField.setFont(new Font("Calibri", 0, 16)); 
+        pictureField.setForeground(new Color(102, 102, 102));
+        pictureField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
+        pictureField.setEnabled(false);
+
+        pictureChoserButton.setFont(new Font("Calibri", 0, 18)); 
+        pictureChoserButton.setText("Choisir");
+        pictureChoserButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        gradeLabel.setFont(new Font("Calibri", 0, 18)); 
+        gradeLabel.setForeground(new Color(102, 102, 102));
+        gradeLabel.setText("Grade");
+
+        gradeComboBox.setModel(new DefaultComboBoxModel<>(new String[]{"Doctorant", "Dr.", "Pr."}));
+        gradeComboBox.setSelectedIndex(1);
+        gradeComboBox.setToolTipText("");
+        gradeComboBox.setEnabled(false);
+
+        departmentLabel.setFont(new Font("Calibri", 0, 18)); 
+        departmentLabel.setForeground(new Color(102, 102, 102));
+        departmentLabel.setText("Departement");
+
+        departmentComboBox.setModel(new DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
+        departmentComboBox.setEnabled(false);
+
+        emailLabel.setFont(new Font("Calibri", 0, 18)); 
+        emailLabel.setForeground(new Color(102, 102, 102));
+        emailLabel.setText("Email");
+
+        emailField.setFont(new Font("Calibri", 0, 16)); 
+        emailField.setForeground(new Color(102, 102, 102));
+        emailField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
+
+        phoneLabel.setFont(new Font("Calibri", 0, 18)); 
+        phoneLabel.setForeground(new Color(102, 102, 102));
+        phoneLabel.setText("Téléphone");
+
+        phoneField.setFont(new Font("Calibri", 0, 16)); 
+        phoneField.setForeground(new Color(102, 102, 102));
+        phoneField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
+
+        passwordLabel.setFont(new Font("Calibri", 0, 18)); 
+        passwordLabel.setForeground(new Color(102, 102, 102));
+        passwordLabel.setText("Mot de passe");
+
+        passwordField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
+        passwordField.setFont(new Font("Calibri", 0, 16));
+
+        passwordConfirmationLabel.setFont(new Font("Calibri", 0, 18)); 
+        passwordConfirmationLabel.setForeground(new Color(102, 102, 102));
+        passwordConfirmationLabel.setText("Confirmation du mot de passe");
+        passwordConfirmationField.setFont(new Font("Calibri", 0, 16));
+
+        passwordConfirmationField.setCursor(new Cursor(Cursor.TEXT_CURSOR));
+
+        registrationButton.setFont(new Font("Calibri Light", 0, 18)); 
+        registrationButton.setText("Inscription");
+        registrationButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        registrationButton.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent evt) {
+                register(evt);
+            }
+        });
+
+        GroupLayout rightSidePanelLayout = new GroupLayout(rightSidePanel);
+        rightSidePanel.setLayout(rightSidePanelLayout);
+        rightSidePanelLayout.setHorizontalGroup(
+                rightSidePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(rightSidePanelLayout.createSequentialGroup()
+                                .addGap(37, 37, 37)
+                                .addGroup(rightSidePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addGroup(rightSidePanelLayout.createSequentialGroup()
+                                                .addComponent(studentRadioButton)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(professorRadioButton))
+                                        .addGroup(rightSidePanelLayout.createSequentialGroup()
+                                                .addGroup(rightSidePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                                        .addComponent(firstNameField, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(firstNameLabel)
+                                                        .addComponent(pictureLabel))
+                                                .addGap(18, 18, 18)
+                                                .addGroup(rightSidePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                                        .addComponent(lastNameLabel)
+                                                        .addComponent(lastNameField, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE)))
+                                        .addGroup(rightSidePanelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
+                                                .addComponent(registrationButton, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(phoneLabel, GroupLayout.Alignment.LEADING)
+                                                .addGroup(GroupLayout.Alignment.LEADING, rightSidePanelLayout.createSequentialGroup()
+                                                        .addGroup(rightSidePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                                                .addComponent(gradeComboBox, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE)
+                                                                .addComponent(gradeLabel)
+                                                                .addComponent(emailLabel))
+                                                        .addGap(18, 18, 18)
+                                                        .addGroup(rightSidePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                                                .addComponent(departmentComboBox, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE)
+                                                                .addComponent(departmentLabel)))
+                                                .addGroup(GroupLayout.Alignment.LEADING, rightSidePanelLayout.createSequentialGroup()
+                                                        .addComponent(pictureField, GroupLayout.PREFERRED_SIZE, 414, GroupLayout.PREFERRED_SIZE)
+                                                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                                        .addComponent(pictureChoserButton, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(emailField, GroupLayout.Alignment.LEADING)
+                                                .addComponent(phoneField, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 518, GroupLayout.PREFERRED_SIZE)
+                                                .addGroup(GroupLayout.Alignment.LEADING, rightSidePanelLayout.createSequentialGroup()
+                                                        .addComponent(passwordLabel)
+                                                        .addGap(181, 181, 181)
+                                                        .addComponent(passwordConfirmationLabel))
+                                                .addGroup(GroupLayout.Alignment.LEADING, rightSidePanelLayout.createSequentialGroup()
+                                                        .addComponent(passwordField, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE)
+                                                        .addGap(23, 23, 23)
+                                                        .addComponent(passwordConfirmationField, GroupLayout.PREFERRED_SIZE, 245, GroupLayout.PREFERRED_SIZE)))
+                                        .addGroup(rightSidePanelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                                .addGroup(rightSidePanelLayout.createSequentialGroup()
+                                                        .addComponent(alreadyAccountLabel)
+                                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                        .addComponent(loginLabel))
+                                                .addGroup(rightSidePanelLayout.createSequentialGroup()
+                                                        .addComponent(registrationLabel)
+                                                        .addGap(418, 418, 418))))
+                                .addContainerGap(126, Short.MAX_VALUE))
+        );
+        rightSidePanelLayout.setVerticalGroup(
+                rightSidePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(rightSidePanelLayout.createSequentialGroup()
+                                .addGap(30, 30, 30)
+                                .addGroup(rightSidePanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                        .addComponent(loginLabel)
+                                        .addComponent(alreadyAccountLabel))
+                                .addGap(17, 17, 17)
+                                .addComponent(registrationLabel)
+                                .addGap(28, 28, 28)
+                                .addGroup(rightSidePanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                        .addComponent(studentRadioButton)
+                                        .addComponent(professorRadioButton))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(rightSidePanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                        .addComponent(firstNameLabel)
+                                        .addComponent(lastNameLabel))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(rightSidePanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                        .addComponent(firstNameField, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(lastNameField, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(rightSidePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addGroup(rightSidePanelLayout.createSequentialGroup()
+                                                .addComponent(pictureLabel)
+                                                .addGap(47, 47, 47))
+                                        .addGroup(GroupLayout.Alignment.TRAILING, rightSidePanelLayout.createSequentialGroup()
+                                                .addGroup(rightSidePanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                                        .addComponent(pictureField, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(pictureChoserButton, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)))
+                                .addGroup(rightSidePanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                        .addComponent(departmentLabel)
+                                        .addComponent(gradeLabel))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(rightSidePanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                        .addComponent(departmentComboBox, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(gradeComboBox, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(emailLabel)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(emailField, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(phoneLabel)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(phoneField, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(rightSidePanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                        .addComponent(passwordLabel)
+                                        .addComponent(passwordConfirmationLabel))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(rightSidePanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                        .addComponent(passwordField, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(passwordConfirmationField, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addComponent(registrationButton, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
+                                .addGap(28, 28, 28))
+        );
+
+        GroupLayout mainPanelLayout = new GroupLayout(mainPanel);
+        mainPanel.setLayout(mainPanelLayout);
+        mainPanelLayout.setHorizontalGroup(
+                mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addGroup(mainPanelLayout.createSequentialGroup()
+                                                .addGap(71, 71, 71)
+                                                .addComponent(descriptionScrollPane, GroupLayout.PREFERRED_SIZE, 274, GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(mainPanelLayout.createSequentialGroup()
+                                                .addGap(100, 100, 100)
+                                                .addComponent(welcomeLabel)))
+                                .addGap(73, 73, 73)
+                                .addComponent(jSeparator, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(rightSidePanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+        );
+        mainPanelLayout.setVerticalGroup(
+                mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addComponent(jSeparator, GroupLayout.Alignment.TRAILING)
+                        .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addGap(95, 95, 95)
+                                .addComponent(welcomeLabel)
+                                .addGap(57, 57, 57)
+                                .addComponent(descriptionScrollPane, GroupLayout.PREFERRED_SIZE, 368, GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(130, Short.MAX_VALUE))
+                        .addComponent(rightSidePanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        GroupLayout layout = new GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addComponent(mainPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        );
+        layout.setVerticalGroup(
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addComponent(mainPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        pack();
+    }
+
+}

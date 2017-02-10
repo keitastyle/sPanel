@@ -1,0 +1,104 @@
+package com.spanel.forms;
+
+import com.spanel.app.Request;
+import com.spanel.beans.Affectation;
+import com.spanel.dao.*;
+
+/**
+ * Created by koyre on 23/12/16.
+ */
+public class CourseAllocationForm extends Form{
+    private ModuleDAO moduleDAO;
+    private CourseDAO courseDAO;
+    private AffectationDAO affectationDAO;
+
+    private ProfessorDAO professorDAO;
+
+    public static final String CLASS_ID_FIELD = "class_id";
+    public static final String COURSE_NAME_FIELD = "course_name";
+    public static final String MODULE_NAME_FIELD = "module_name";
+    public static final String PROFESSOR_NAME_FIELD = "professor_name";
+    public static final String HOURS_FIELD = "hours";
+    public static final String COEFFICIENT_FIELD = "coef";
+
+    public CourseAllocationForm(
+            ModuleDAO moduleDAO,
+            CourseDAO courseDAO,
+            AffectationDAO affectationDAO,
+            ProfessorDAO professorDAO) {
+
+        this.moduleDAO = moduleDAO;
+        this.courseDAO = courseDAO;
+        this.affectationDAO= affectationDAO;
+
+        this.professorDAO = professorDAO;
+    }
+
+    public void allocate(Request request) {
+        validateNotNullFields(request);
+        if(hasErrors()) return;
+
+        String moduleName = request.getFieldValue(MODULE_NAME_FIELD);
+        Long classId = Long.parseLong(request.getFieldValue(CLASS_ID_FIELD));
+        String courseName = request.getFieldValue(COURSE_NAME_FIELD);
+        String professorName = request.getFieldValue(PROFESSOR_NAME_FIELD);
+        Long hours = Long.parseLong(request.getFieldValue(HOURS_FIELD));
+        Long coefficient = Long.parseLong(request.getFieldValue(COEFFICIENT_FIELD));
+
+        Long professorId = professorDAO.findByName(professorName).getId();
+        Long moduleId = moduleDAO.findByName(moduleName).getId();
+        Long courseId = courseDAO.findByName(courseName).getId();
+
+        Affectation affectation = new Affectation();
+        affectation.setClassId(classId);
+        affectation.setModuleId(moduleId);
+        validateCoefficient(coefficient, affectation);
+        affectation.setCourseId(courseId);
+        validateHours(hours, affectation);
+        affectation.setProfessorId(professorId);
+
+        if(!hasErrors()){
+            affectationDAO.create(affectation);
+        }
+    }
+
+    private void validateHours( Long hours, Affectation affectation ) {
+        try {
+            hoursValidation( hours );
+        } catch ( FormValidationException e ) {
+            setError(e.getMessage() );
+        }
+        affectation.setHours(hours);
+    }
+
+    private void hoursValidation( Long hours ) throws FormValidationException {
+        if ( hours == 0) {
+            throw new FormValidationException( "Nombre d'heures non saisie" );
+        }
+    }
+
+    private void validateCoefficient( Long coefficient, Affectation affectation ) {
+        try {
+            coefficientValidation( coefficient, affectation);
+        } catch ( FormValidationException e ) {
+            setError(e.getMessage() );
+        }
+        affectation.setCoefficient(coefficient);
+    }
+
+    private void coefficientValidation( Long coefficient, Affectation affectation) throws FormValidationException {
+        if ( coefficient == 0) {
+            throw new FormValidationException( "Coefficient non saisie" );
+        }else{
+            long totalCoeff = 0;
+            for (Affectation a : affectationDAO.findAll(affectation.getClassId(), affectation.getModuleId())){
+                totalCoeff += a.getCoefficient();
+            }
+
+            if(coefficient + totalCoeff > 100){
+                throw new FormValidationException( "Coefficient total supérieur à 100" );
+            }
+        }
+    }
+}
+

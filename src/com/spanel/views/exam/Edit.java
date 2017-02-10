@@ -1,0 +1,223 @@
+package com.spanel.views.exam;
+
+import com.spanel.App;
+import com.spanel.app.Request;
+import com.spanel.beans.Course;
+import com.spanel.beans.Exam;
+import com.spanel.beans.Professor;
+import com.spanel.controllers.ExamController;
+import com.spanel.dao.DAOFactory;
+import com.spanel.forms.ExamModificationForm;
+import com.spanel.views.Layout;
+
+import javax.swing.*;
+import javax.swing.text.DateFormatter;
+import javax.swing.text.DefaultFormatterFactory;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+
+/**
+ * Created by Joel on 24/11/2016.
+ */
+public class Edit extends JDialog {
+    private JComboBox<String> courseComboBox;
+    private JLabel courseLabel;
+    private JLabel dateLabel;
+    private JFormattedTextField dateTextField;
+    private JLabel descriptionLabel;
+    private JScrollPane descriptionScrollPane;
+    private JTextArea descriptionTextArea;
+    private JLabel hourLabel;
+    private JFormattedTextField hourTextField;
+    private JPanel mainPanel;
+    private JLabel roomLabel;
+    private JTextField roomTextField;
+    private JButton submitButton;
+    private JComboBox<String> typeComboBox;
+    private JLabel typeLabel;
+
+    private Index index;
+    private Exam exam;
+
+    public Edit(Index index, boolean modal, List<Course> courses, Exam exam) {
+        super(index.getClassIndex().getAppLayout(), modal);
+
+        this.index = index;
+        this.exam = exam;
+
+        String coursesList[] = new String[courses.size()];
+        for(int i =0; i<courses.size(); i++){
+            coursesList[i] = courses.get(i).getName();
+        }
+
+        initComponents();
+
+        DAOFactory daoFactory = index.getClassIndex().getMain().getDaoFactory();
+
+        courseComboBox.setModel(new DefaultComboBoxModel<>(coursesList));
+        courseComboBox.setSelectedItem(exam.getAffectation(daoFactory).getCourse(daoFactory).getName());
+        typeComboBox.setSelectedItem(exam.getType());
+        dateTextField.setText(exam.getDate());
+        hourTextField.setText(exam.getHour());
+        roomTextField.setText(exam.getRoom());
+        descriptionTextArea.setText(exam.getDescription());
+
+        setVisible(true);
+    }
+
+    public void update(){
+        Request request = new Request(getAppLayout(), getMain());
+
+        request.addField(ExamModificationForm.EXAM_ID, Long.toString(exam.getId()));
+        request.addField(ExamModificationForm.COURSE_NAME_FIELD, (String) courseComboBox.getSelectedItem());
+        request.addField(ExamModificationForm.TYPE_FIELD, (String) typeComboBox.getSelectedItem());
+        request.addField(ExamModificationForm.DATE_FIELD, dateTextField.getText());
+        request.addField(ExamModificationForm.HOUR_FIELD, hourTextField.getText());
+        request.addField(ExamModificationForm.ROOM_FIELD, roomTextField.getText());
+        request.addField(ExamModificationForm.DESCRIPTION_FIELD, descriptionTextArea.getText());
+
+        DAOFactory daoFactory = getMain().getDaoFactory();
+        Professor professor = (Professor) getMain().getUser().getUserable(daoFactory);
+        com.spanel.beans.Class classroom = index.getClassIndex().getClassroom();
+
+        request.addField(ExamModificationForm.PROFESSOR_ID, Long.toString(professor.getId()));
+        request.addField(ExamModificationForm.CLASS_ID, Long.toString(classroom.getId()));
+        if(ExamController.update(request))
+            index.getClassIndex().setTabComponents(2);
+        dispose();
+    }
+
+    private void initComponents() {
+        mainPanel = new JPanel();
+        courseLabel = new JLabel();
+        courseComboBox = new JComboBox<>();
+        typeLabel = new JLabel();
+        typeComboBox = new JComboBox<>();
+        dateLabel = new JLabel();
+        dateTextField = new JFormattedTextField();
+        hourLabel = new JLabel();
+        hourTextField = new JFormattedTextField();
+        roomLabel = new JLabel();
+        roomTextField = new JTextField();
+        descriptionLabel = new JLabel();
+        descriptionScrollPane = new JScrollPane();
+        descriptionTextArea = new JTextArea();
+        submitButton = new JButton();
+
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Modifier l'examen");
+        setMaximumSize(new java.awt.Dimension(32767, 32767));
+        setPreferredSize(new java.awt.Dimension(400, 350));
+
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        mainPanel.setPreferredSize(new java.awt.Dimension(400, 300));
+
+        courseLabel.setText("Matière :");
+
+        typeLabel.setText("Type :");
+
+        typeComboBox.setModel(new DefaultComboBoxModel<>(new String[] { "Controle", "Examen", "Examen TP", "Rattrapage" }));
+        typeComboBox.setSelectedIndex(1);
+
+        dateLabel.setText("Date :");
+
+        dateTextField.setFormatterFactory(new DefaultFormatterFactory(new DateFormatter(new java.text.SimpleDateFormat("dd/MM/yy"))));
+
+        hourLabel.setText("Heure :");
+
+        hourTextField.setFormatterFactory(new DefaultFormatterFactory(new DateFormatter(new java.text.SimpleDateFormat("H:mm"))));
+        hourTextField.setText("8:00");
+
+        roomLabel.setText("Salle :");
+
+        descriptionLabel.setText("Description :");
+
+        descriptionScrollPane.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(204, 204, 204)));
+
+        descriptionTextArea.setColumns(20);
+        descriptionTextArea.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        descriptionTextArea.setLineWrap(true);
+        descriptionTextArea.setRows(5);
+        descriptionScrollPane.setViewportView(descriptionTextArea);
+
+        submitButton.setText("Modifier");
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                update();
+            }
+        });
+
+        GroupLayout mainPanelLayout = new GroupLayout(mainPanel);
+        mainPanel.setLayout(mainPanelLayout);
+        mainPanelLayout.setHorizontalGroup(
+                mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(courseLabel)
+                                        .addComponent(typeLabel)
+                                        .addComponent(dateLabel)
+                                        .addComponent(descriptionLabel)
+                                        .addComponent(hourLabel)
+                                        .addComponent(roomLabel))
+                                .addGap(79, 79, 79)
+                                .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(descriptionScrollPane, GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
+                                        .addGroup(mainPanelLayout.createSequentialGroup()
+                                                .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                                        .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                                                .addComponent(submitButton)
+                                                                .addComponent(typeComboBox, 0, 144, Short.MAX_VALUE)
+                                                                .addComponent(dateTextField, GroupLayout.PREFERRED_SIZE, 110, GroupLayout.PREFERRED_SIZE)
+                                                                .addComponent(courseComboBox, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                        .addComponent(hourTextField, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE))
+                                                .addGap(0, 0, Short.MAX_VALUE))
+                                        .addComponent(roomTextField))
+                                .addContainerGap())
+        );
+        mainPanelLayout.setVerticalGroup(
+                mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                        .addComponent(courseLabel)
+                                        .addComponent(courseComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                        .addComponent(typeLabel)
+                                        .addComponent(typeComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                        .addComponent(dateLabel)
+                                        .addComponent(dateTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                        .addComponent(hourLabel)
+                                        .addComponent(hourTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                        .addComponent(roomLabel)
+                                        .addComponent(roomTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(descriptionLabel)
+                                        .addComponent(descriptionScrollPane, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(submitButton)
+                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        getContentPane().add(mainPanel, java.awt.BorderLayout.CENTER);
+
+        pack();
+    }
+
+    public Layout getAppLayout(){
+        return index.getClassIndex().getAppLayout();
+    }
+
+    public App getMain(){
+        return index.getClassIndex().getMain();
+    }
+}

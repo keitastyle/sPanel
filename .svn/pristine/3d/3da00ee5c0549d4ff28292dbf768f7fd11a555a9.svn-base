@@ -1,0 +1,27 @@
+package com.spanel;
+
+import com.spanel.beans.User;
+import com.spanel.views.Layout;
+import com.spanel.views.auth.Login;
+import org.jasypt.util.password.ConfigurablePasswordEncryptor;
+
+/**
+ * Created by Joel on 30/11/2016.
+ */
+public class App {
+    private User user;
+
+    public static void main(String args[]){
+        App main = new App();
+        new Login(main).setVisible(true);
+        // new Layout(main).setVisible(true);
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+}

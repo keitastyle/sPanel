@@ -1,0 +1,102 @@
+package com.spanel.dao;
+
+import com.spanel.beans.Student;
+import com.spanel.beans.User;
+
+import java.rmi.StubNotFoundException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import static com.spanel.dao.DAOUtilitary.initPreparedStatement;
+import static com.spanel.dao.DAOUtilitary.silentClose;
+
+/**
+ * Created by Joel on 06/12/2016.
+ */
+public class StudentDAOImpl implements StudentDAO {
+
+    private DAOFactory daoFactory;
+
+    private static final String SQL_INSERT_WITHOUT_CLASS = "INSERT INTO students (student_id) VALUES (?)";
+    private static final String SQL_SELECT_BY_STUDENT_ID = "SELECT id, student_id, class_id FROM students WHERE student_id = ?";
+
+    private static final String SQL_SELECT_ID = "SELECT id, student_id, class_id FROM students WHERE id = ?";
+
+    StudentDAOImpl(DAOFactory daoFactory){
+        this.daoFactory = daoFactory;
+    }
+
+    @Override
+    public void create(Student student) throws DAOException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet autoGenerateValues = null;
+
+        try {
+            connection = daoFactory.getConnection();
+            preparedStatement = initPreparedStatement( connection, SQL_INSERT_WITHOUT_CLASS, true, student.getStudentId());
+            int state = preparedStatement.executeUpdate();
+            if ( state == 0 ) {
+                throw new DAOException( "Echec de la création de l'étudiant, aucune ligne ajoutée à la table." );
+            }
+            autoGenerateValues = preparedStatement.getGeneratedKeys();
+            if ( autoGenerateValues.next() ) {
+                student.setId( autoGenerateValues.getLong( 1 ) );
+            } else {
+                throw new DAOException( "Echec de la création de l'étudiant en base, aucun ID auto-généré retourné." );
+            }
+        } catch ( SQLException e ) {
+            throw new DAOException( e );
+        } finally {
+            silentClose( autoGenerateValues, preparedStatement, connection );
+        }
+    }
+
+    @Override
+    public Student findByStudentId(String studentId) throws DAOException {
+        return find(SQL_SELECT_BY_STUDENT_ID, studentId);
+    }
+
+    @Override
+    public Student find(Long id) throws DAOException {
+        return find(SQL_SELECT_ID, id);
+    }
+
+    @Override
+    public Student find(User user) throws DAOException {
+        if(user.isStudent()) return  find(SQL_SELECT_ID,user.getUserableId());
+        return null;
+    }
+
+    private Student find(String sql, Object... objects ) throws DAOException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        Student student = null;
+
+        try {
+            connection = daoFactory.getConnection();
+            preparedStatement = initPreparedStatement( connection, sql, false, objects );
+            resultSet = preparedStatement.executeQuery();
+            if ( resultSet.next() ) {
+                student = map( resultSet );
+            }
+        } catch ( SQLException e ) {
+            throw new DAOException( e );
+        } finally {
+            silentClose( resultSet, preparedStatement, connection );
+        }
+
+        return student;
+    }
+
+    public static Student  map(ResultSet resultSet ) throws SQLException{
+        Student student = new Student();
+        student.setId(resultSet.getLong("id"));
+        student.setStudentId(resultSet.getString("student_id"));
+        student.setClassId(resultSet.getLong("class_id"));
+        return student;
+    }
+}

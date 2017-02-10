@@ -1,0 +1,17 @@
+package com.spanel.dao;
+
+import com.spanel.beans.Affectation;
+import com.spanel.beans.Class;
+import com.spanel.beans.Module;
+
+import java.util.List;
+
+/**
+ * Created by koyre on 25/12/16.
+ */
+public interface AffectationDAO {
+
+    void create (Affectation affectation) throws DAOException;
+
+    List<Affectation> findAll(Long classId, Long moduleId) throws DAOException;
+}

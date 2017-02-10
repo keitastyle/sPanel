@@ -1,0 +1,20 @@
+package com.spanel.dao;
+
+import com.spanel.beans.Class;
+import com.spanel.beans.Professor;
+
+import java.util.List;
+
+/**
+ * Created by koria on 04/12/2016.
+ */
+public interface ClassDAO {
+    void create(Class classroom) throws DAOException;
+    void update(Long id) throws DAOException;
+    Class find(Long id) throws DAOException;
+    List<Class> findAll() throws DAOException;
+    List<Class> findAll(Professor professor) throws DAOException;
+    List<Class> findAll(Long professorId) throws DAOException;
+
+    Class findByName(String classe);
+}

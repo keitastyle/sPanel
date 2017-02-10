@@ -1,0 +1,38 @@
+package com.spanel.controllers;
+
+import com.spanel.app.Request;
+import com.spanel.beans.Affectation;
+import com.spanel.dao.*;
+import com.spanel.forms.AllocationCourseForm;
+
+/**
+ * Created by koyre on 24/12/16.
+ */
+public class AffectationController {
+
+    private UserDAO professorUserDAO;
+    private ModuleDAO moduleDAO;
+    private ClassDAO classDAO;
+    private CourseDAO courseDAO;
+    private AffectationDAO affectationDAO;
+
+
+    public AffectationController(DAOFactory daoFactory) {
+        this.professorUserDAO = daoFactory.getUserDao();
+        this.moduleDAO = daoFactory.getModuleDao();
+        this.classDAO = daoFactory.getClassDAO();
+        this.courseDAO = daoFactory.getCourseDao();
+        this.affectationDAO = daoFactory.getAffectationDao();
+    }
+
+    public static boolean create(Request request){
+        AffectationController controller=new AffectationController(request.getMain().getDaoFactory());
+        AllocationCourseForm form = new AllocationCourseForm(controller.classDAO,controller.moduleDAO,controller.professorUserDAO,controller.courseDAO,controller.affectationDAO);
+        form.create(request);
+        if(form.hasErrors()){
+            new com.spanel.views.dialog.Error(request.getParent(), true, form.getErrors());
+            return false;
+        }
+        return true;
+    }
+}

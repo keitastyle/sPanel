@@ -1,0 +1,30 @@
+package com.spanel.dao;
+
+import com.spanel.beans.Course;
+
+/**
+ * Created by koria on 04/12/2016.
+ */
+public class CourseDAOImpl implements CourseDAO {
+
+    private static final String SQL_INSERT_INTO_COURSE="INSERT INTO courses(id,nom) VALUES(?,?)";
+
+    private DAOFactory   daoFactory;
+
+    CourseDAOImpl(DAOFactory daoFactory){ this.daoFactory=daoFactory;}
+
+    @Override
+    public void create(Course course) throws DAOException {
+
+    }
+
+    @Override
+    public void update(Long id) throws DAOException {
+
+    }
+
+    @Override
+    public Course find(Long id) throws DAOException {
+        return null;
+    }
+}

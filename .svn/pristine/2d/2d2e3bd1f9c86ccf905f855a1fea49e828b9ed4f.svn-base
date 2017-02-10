@@ -1,0 +1,9 @@
+package com.spanel.beans;
+
+/**
+ * Created by Joel on 24/11/2016.
+ */
+public class Department {
+    private Long id;
+    private String name;
+}

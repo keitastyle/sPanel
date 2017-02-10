@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="MySQL - spanel@localhost" uuid="8ca5587c-7e83-4cab-a981-e0c3d1b90ff6">
+      <secret-storage>master_key</secret-storage>
+      <user-name>root</user-name>
+      <schema-pattern>helpdesk.*</schema-pattern>
+      <default-schemas>helpdesk.*</default-schemas>
+    </data-source>
+    <data-source name="MySQL - helpdesk@localhost" uuid="43ff43c4-fc2f-471e-8f18-a0f42f80aa81">
+      <secret-storage>master_key</secret-storage>
+      <user-name>root</user-name>
+      <schema-pattern>helpdesk.*</schema-pattern>
+      <default-schemas>helpdesk.*</default-schemas>
+    </data-source>
+    <data-source name="MySQL - spanel@localhost [2]" uuid="1309cf04-d47e-41db-a128-16d110e7a827">
+      <secret-storage>master_key</secret-storage>
+      <user-name>root</user-name>
+      <schema-pattern>spanel.*</schema-pattern>
+      <default-schemas>spanel.*</default-schemas>
+    </data-source>
+  </component>
+</project>

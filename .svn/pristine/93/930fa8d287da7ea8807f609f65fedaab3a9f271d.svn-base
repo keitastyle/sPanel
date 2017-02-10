@@ -1,0 +1,77 @@
+package com.spanel.beans;
+
+/**
+ * Created by Joel on 25/11/2016.
+ */
+public class Affectation {
+    private Long id;
+    private Long professorId;
+    private Long classModuleId;
+    private Long courseId;
+    private int hours;
+    private int coefficient;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getProfessorId() {
+        return professorId;
+    }
+
+    public void setProfessorId(Long professorId) {
+        this.professorId = professorId;
+    }
+
+    public Long getClassModuleId() {
+        return classModuleId;
+    }
+
+    public void setClassModuleId(Long classModuleId) {
+        this.classModuleId = classModuleId;
+    }
+
+    public Long getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(Long courseId) {
+        this.courseId = courseId;
+    }
+
+    public int getHours() {
+        return hours;
+    }
+
+    public void setHours(int hours) {
+        this.hours = hours;
+    }
+
+    public int getCoefficient() {
+        return coefficient;
+    }
+
+    public void setCoefficient(int coefficient) {
+        this.coefficient = coefficient;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Affectation that = (Affectation) o;
+
+        return id.equals(that.id);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+}

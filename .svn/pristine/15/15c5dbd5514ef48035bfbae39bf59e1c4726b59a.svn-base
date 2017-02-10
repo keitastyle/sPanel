@@ -1,0 +1,71 @@
+package com.spanel.forms;
+
+import com.spanel.beans.User;
+import com.spanel.dao.UserDAO;
+import org.jasypt.util.password.ConfigurablePasswordEncryptor;
+
+/**
+ * Created by Joel on 25/11/2016.
+ */
+public class InscriptionForm extends Form {
+
+    private static final String CODING_ALGORITHM                = "SHA-256";
+
+    private UserDAO userDAO;
+
+    public User subscribe() {
+        //
+        return new User();
+    }
+
+
+    private void validateEmail( String email, User user ) {
+        try {
+            emailValidation( email );
+        } catch ( FormValidationException e ) {
+            setError(e.getMessage() );
+        }
+        user.setEmail( email );
+    }
+
+
+    private void validatePassword( String password, String confirmation, User user ) {
+        try {
+            passwordValidation( password, confirmation );
+        } catch ( FormValidationException e ) {
+            setError(e.getMessage() );
+        }
+
+        ConfigurablePasswordEncryptor passwordEncryptor = new ConfigurablePasswordEncryptor();
+        passwordEncryptor.setAlgorithm( CODING_ALGORITHM );
+        passwordEncryptor.setPlainDigest( false );
+        String cryptedPassword = passwordEncryptor.encryptPassword( password );
+
+        user.setPassword( cryptedPassword );
+    }
+
+    private void emailValidation( String email ) throws FormValidationException {
+        if ( email != null ) {
+            if ( !email.matches( "([^.@]+)(\\.[^.@]+)*@([^.@]+\\.)+([^.@]+)" ) ) {
+                throw new FormValidationException( "Adresse e-mail invalide" );
+            } else if ( userDAO.find( email ) != null ) {
+                throw new FormValidationException( "Adresse email déjà  utilisée" );
+            }
+        } else {
+            throw new FormValidationException( "Adresse email non saisie" );
+        }
+    }
+
+
+    private void passwordValidation( String password, String confirmation ) throws FormValidationException {
+        if ( password != null && confirmation != null ) {
+            if ( !password.equals( confirmation ) ) {
+                throw new FormValidationException( "Mots de passe différents" );
+            } else if ( password.length() < 3 ) {
+                throw new FormValidationException( "Le mot de passe doit contenir au moins 3 caractères." );
+            }
+        } else {
+            throw new FormValidationException( "Merci de saisir et confirmer votre mot de passe." );
+        }
+    }
+}

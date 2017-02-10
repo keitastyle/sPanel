@@ -1,0 +1,451 @@
+package com.spanel.views;
+
+import com.spanel.App;
+import com.spanel.views.dialog.Create;
+import com.spanel.views.allocation.Main;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+/**
+ * Created by Joel on 06/11/2016.
+ */
+public class Layout extends JFrame {
+    private App main;
+
+    private JPanel createMenuPanel;
+    private JLabel createMenuText;
+    private JLabel descriptionLabel;
+    private JLabel homeMenuLabel;
+    private JPanel homeMenuPanel;
+    private JMenu sPanelMenu;
+    private JMenu helpMenu;
+    private JMenuItem profileMenu;
+    private JMenuItem logoutMenu;
+    private JMenuItem closeMenu;
+    private JPanel jPanel;
+    private JPopupMenu.Separator sPanelMenuSeparator;
+    private JPanel leftMenuPanel;
+    private JPanel leftPanel;
+    private JPanel mainPanel;
+    private JTabbedPane mainTabbedPane;
+    private JMenuBar menuBar;
+    private JPanel menuPanel;
+    private JLabel nameLabel;
+    private JPanel notificationPanel;
+    private JSeparator notificationSeparator;
+    private JLabel notificationText;
+    private JPanel notificationsPanel;
+    private JScrollPane notificationsScrollPane;
+    private JPanel profilePanel;
+    private JPanel profilePicturePanel;
+    private JPanel rightMenuPanel;
+    private JPanel rightPanel;
+    private JPanel searchIconPanel;
+    private JPanel searchPanel;
+    private JTextField searchTextField;
+    private JSeparator verticalSeparator;
+
+    private Font defaultFont = new Font("Calibri", Font.PLAIN, 15);
+
+    private Container container = getContentPane();
+
+    public Layout(App main){
+        this.main = main;
+
+        try {
+            UIManager.setLookAndFeel(
+                    UIManager.getSystemLookAndFeelClassName());
+        }
+        catch (ClassNotFoundException e) {
+            System.err.println("Couldn't find class for system look and feel");
+            System.err.println("Using the default look and feel.");
+        }
+
+        catch (UnsupportedLookAndFeelException e) {
+            System.err.println("Can't use the system look and feel on this platform.");
+            System.err.println("Using the default look and feel.");
+        }
+
+        catch (Exception e) {
+            System.err.println("Couldn't get system look and feel for some reason.");
+            System.err.println("Using the default look and feel.");
+            e.printStackTrace();
+        }
+
+        initComponents();
+        setTabComponents();
+    }
+
+    private void initComponents() {
+
+        mainPanel = new JPanel();
+        verticalSeparator = new JSeparator();
+        leftPanel = new JPanel();
+        profilePanel = new JPanel();
+        profilePicturePanel = new JPanel();
+        nameLabel = new JLabel();
+        descriptionLabel = new JLabel();
+        searchPanel = new JPanel();
+        searchTextField = new JTextField();
+        searchIconPanel = new JPanel();
+        menuPanel = new JPanel();
+        leftMenuPanel = new JPanel();
+        homeMenuPanel = new JPanel();
+        homeMenuLabel = new JLabel();
+        rightMenuPanel = new JPanel();
+        createMenuPanel = new JPanel();
+        createMenuText = new JLabel();
+        notificationPanel = new JPanel();
+        notificationText = new JLabel();
+        notificationSeparator = new JSeparator();
+        notificationsScrollPane = new JScrollPane();
+        notificationsPanel = new JPanel();
+        rightPanel = new JPanel();
+        mainTabbedPane = new JTabbedPane();
+        jPanel = new JPanel();
+        menuBar = new JMenuBar();
+        sPanelMenu = new JMenu();
+        profileMenu = new JMenuItem();
+        sPanelMenuSeparator = new JPopupMenu.Separator();
+        logoutMenu = new JMenuItem();
+        closeMenu = new JMenuItem();
+        helpMenu = new JMenu();
+
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new Color(255, 255, 255));
+        setMinimumSize(new Dimension(1125, 650));
+
+        mainPanel.setBackground(new Color(255, 255, 255));
+
+        verticalSeparator.setForeground(new Color(204, 204, 204));
+        verticalSeparator.setOrientation(SwingConstants.VERTICAL);
+
+        leftPanel.setBackground(new Color(250, 250, 250));
+
+        profilePanel.setBackground(new Color(250, 250, 250));
+        profilePanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        profilePicturePanel.setBackground(new Color(153, 153, 153));
+
+        GroupLayout profilePicturePanelLayout = new GroupLayout(profilePicturePanel);
+        profilePicturePanel.setLayout(profilePicturePanelLayout);
+        profilePicturePanelLayout.setHorizontalGroup(
+                profilePicturePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGap(0, 55, Short.MAX_VALUE)
+        );
+        profilePicturePanelLayout.setVerticalGroup(
+                profilePicturePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGap(0, 55, Short.MAX_VALUE)
+        );
+
+        nameLabel.setFont(nameLabel.getFont().deriveFont(nameLabel.getFont().getSize()+4f));
+        nameLabel.setForeground(new Color(102, 102, 102));
+        nameLabel.setText("John Doe");
+
+        descriptionLabel.setText("description");
+
+        GroupLayout profilePanelLayout = new GroupLayout(profilePanel);
+        profilePanel.setLayout(profilePanelLayout);
+        profilePanelLayout.setHorizontalGroup(
+                profilePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(profilePanelLayout.createSequentialGroup()
+                                .addComponent(profilePicturePanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addGroup(profilePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(nameLabel)
+                                        .addComponent(descriptionLabel))
+                                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        profilePanelLayout.setVerticalGroup(
+                profilePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(profilePanelLayout.createSequentialGroup()
+                                .addGroup(profilePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(profilePicturePanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(profilePanelLayout.createSequentialGroup()
+                                                .addGap(6, 6, 6)
+                                                .addComponent(nameLabel)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(descriptionLabel)))
+                                .addContainerGap())
+        );
+
+        searchPanel.setBackground(new Color(250, 250, 250));
+        searchPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(204, 204, 204)));
+
+        searchTextField.setBackground(new Color(250, 250, 250));
+        searchTextField.setText("Rechercher");
+        searchTextField.setBorder(null);
+
+        searchIconPanel.setBackground(new Color(250, 250, 250));
+        searchIconPanel.setPreferredSize(new Dimension(30, 30));
+
+        GroupLayout searchIconPanelLayout = new GroupLayout(searchIconPanel);
+        searchIconPanel.setLayout(searchIconPanelLayout);
+        searchIconPanelLayout.setHorizontalGroup(
+                searchIconPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGap(0, 30, Short.MAX_VALUE)
+        );
+        searchIconPanelLayout.setVerticalGroup(
+                searchIconPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGap(0, 30, Short.MAX_VALUE)
+        );
+
+        GroupLayout searchPanelLayout = new GroupLayout(searchPanel);
+        searchPanel.setLayout(searchPanelLayout);
+        searchPanelLayout.setHorizontalGroup(
+                searchPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(GroupLayout.Alignment.TRAILING, searchPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(searchTextField)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(searchIconPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+        );
+        searchPanelLayout.setVerticalGroup(
+                searchPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addComponent(searchIconPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(searchTextField, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
+        );
+
+        menuPanel.setBackground(new Color(250, 250, 250));
+        menuPanel.setLayout(new GridLayout(1, 2));
+
+        leftMenuPanel.setBackground(new Color(250, 250, 250));
+        leftMenuPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+        homeMenuPanel.setBackground(new Color(199, 226, 254));
+        homeMenuPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        homeMenuPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        homeMenuLabel.setFont(homeMenuLabel.getFont().deriveFont(homeMenuLabel.getFont().getSize()+2f));
+        homeMenuLabel.setForeground(new Color(51, 51, 51));
+        homeMenuLabel.setText("Accueil");
+
+        GroupLayout homeMenuPanelLayout = new GroupLayout(homeMenuPanel);
+        homeMenuPanel.setLayout(homeMenuPanelLayout);
+        homeMenuPanelLayout.setHorizontalGroup(
+                homeMenuPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(homeMenuPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addGroup(homeMenuPanelLayout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(homeMenuLabel)
+                                        .addGap(0, 0, Short.MAX_VALUE)))
+        );
+        homeMenuPanelLayout.setVerticalGroup(
+                homeMenuPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(homeMenuPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addGroup(homeMenuPanelLayout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(homeMenuLabel)
+                                        .addGap(0, 0, Short.MAX_VALUE)))
+        );
+
+        leftMenuPanel.add(homeMenuPanel);
+
+        menuPanel.add(leftMenuPanel);
+
+        rightMenuPanel.setBackground(new Color(250, 250, 250));
+        rightMenuPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+
+        if(main.getUser() != null && main.getUser().isAdministrator()){
+            createMenuPanel.setBackground(new Color(199, 226, 254));
+            createMenuPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+            createMenuPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            createMenuPanel.addMouseListener(new MouseAdapter() {
+                public void mouseClicked(MouseEvent evt) {
+                    showCreationDialog(evt);
+                }
+            });
+
+
+            createMenuText.setFont(createMenuText.getFont().deriveFont(createMenuText.getFont().getSize()+2f));
+            createMenuText.setForeground(new Color(51, 51, 51));
+            createMenuText.setText("Créer");
+
+            GroupLayout createMenuPanelLayout = new GroupLayout(createMenuPanel);
+            createMenuPanel.setLayout(createMenuPanelLayout);
+            createMenuPanelLayout.setHorizontalGroup(
+                    createMenuPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addGap(0, 0, Short.MAX_VALUE)
+                            .addGroup(createMenuPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                    .addGroup(createMenuPanelLayout.createSequentialGroup()
+                                            .addGap(0, 0, Short.MAX_VALUE)
+                                            .addComponent(createMenuText)
+                                            .addGap(0, 0, Short.MAX_VALUE)))
+            );
+            createMenuPanelLayout.setVerticalGroup(
+                    createMenuPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addGap(0, 0, Short.MAX_VALUE)
+                            .addGroup(createMenuPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                    .addGroup(createMenuPanelLayout.createSequentialGroup()
+                                            .addGap(0, 0, Short.MAX_VALUE)
+                                            .addComponent(createMenuText)
+                                            .addGap(0, 0, Short.MAX_VALUE)))
+            );
+
+            rightMenuPanel.add(createMenuPanel);
+
+            menuPanel.add(rightMenuPanel);
+        }
+
+        notificationPanel.setBackground(new Color(250, 250, 250));
+        notificationPanel.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 15));
+        notificationPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+        notificationText.setFont(new Font("Calibri Light", 0, 14)); // NOI18N
+        notificationText.setText("NOTIFICATIONS");
+        notificationPanel.add(notificationText);
+
+        notificationSeparator.setForeground(new Color(153, 204, 255));
+
+        notificationsScrollPane.setBackground(new Color(250, 250, 250));
+        notificationsScrollPane.setBorder(null);
+        notificationsScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        notificationsPanel.setBackground(new Color(250, 250, 250));
+
+        GroupLayout notificationsPanelLayout = new GroupLayout(notificationsPanel);
+        notificationsPanel.setLayout(notificationsPanelLayout);
+        notificationsPanelLayout.setHorizontalGroup(
+                notificationsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGap(0, 270, Short.MAX_VALUE)
+        );
+        notificationsPanelLayout.setVerticalGroup(
+                notificationsPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGap(0, 333, Short.MAX_VALUE)
+        );
+
+        notificationsScrollPane.setViewportView(notificationsPanel);
+
+        GroupLayout leftPanelLayout = new GroupLayout(leftPanel);
+        leftPanel.setLayout(leftPanelLayout);
+        leftPanelLayout.setHorizontalGroup(
+                leftPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addComponent(notificationPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(notificationSeparator)
+                        .addGroup(leftPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(leftPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(notificationsScrollPane)
+                                        .addComponent(searchPanel, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(profilePanel, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(menuPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addContainerGap())
+        );
+        leftPanelLayout.setVerticalGroup(
+                leftPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(leftPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(profilePanel, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(searchPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(menuPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(notificationPanel, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(notificationSeparator, GroupLayout.PREFERRED_SIZE, 2, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(notificationsScrollPane)
+                                .addContainerGap())
+        );
+
+        rightPanel.setBackground(new Color(255, 255, 255));
+        rightPanel.setLayout(new BorderLayout());
+
+        mainTabbedPane.setBackground(new Color(255, 255, 255));
+        mainTabbedPane.setToolTipText("");
+        mainTabbedPane.setAutoscrolls(true);
+
+        jPanel.setBackground(new Color(255, 255, 255));
+
+        GroupLayout jPanelLayout = new GroupLayout(jPanel);
+        jPanel.setLayout(jPanelLayout);
+        jPanelLayout.setHorizontalGroup(
+                jPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGap(0, 806, Short.MAX_VALUE)
+        );
+        jPanelLayout.setVerticalGroup(
+                jPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGap(0, 516, Short.MAX_VALUE)
+        );
+
+        mainTabbedPane.addTab("Annonces", new JPanel());
+        mainTabbedPane.addTab("Emplois du temps", new JPanel());
+        mainTabbedPane.addTab("Examens", new JPanel());
+        mainTabbedPane.addTab("Notes", new JPanel());
+        mainTabbedPane.addTab("Modules", new JPanel());
+        mainTabbedPane.addTab("Etudiants", new JPanel());
+        mainTabbedPane.addTab("Affectations", new JPanel());
+
+        rightPanel.add(mainTabbedPane, BorderLayout.CENTER);
+
+        GroupLayout mainPanelLayout = new GroupLayout(mainPanel);
+        mainPanel.setLayout(mainPanelLayout);
+        mainPanelLayout.setHorizontalGroup(
+                mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addComponent(leftPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(verticalSeparator, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(rightPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addContainerGap())
+        );
+        mainPanelLayout.setVerticalGroup(
+                mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addComponent(verticalSeparator)
+                        .addComponent(leftPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addComponent(rightPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addContainerGap())
+        );
+
+        menuBar.setBackground(new Color(255, 255, 255));
+
+        sPanelMenu.setText("sPanel");
+
+        profileMenu.setText("Mon compte");
+        sPanelMenu.add(profileMenu);
+        sPanelMenu.add(sPanelMenuSeparator);
+
+        logoutMenu.setText("Deconnexion");
+        sPanelMenu.add(logoutMenu);
+
+        closeMenu.setText("Fermer");
+        sPanelMenu.add(closeMenu);
+
+        menuBar.add(sPanelMenu);
+
+        helpMenu.setText("Aide");
+        menuBar.add(helpMenu);
+
+        setJMenuBar(menuBar);
+
+        GroupLayout layout = new GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addComponent(mainPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addComponent(mainPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        pack();
+    }
+
+    public void setTabComponents(){
+        mainTabbedPane.setComponentAt(6, new Main());
+    }
+
+    public void showCreationDialog(MouseEvent evt){
+        new Create(this,true).setVisible(true);
+    }
+
+
+}

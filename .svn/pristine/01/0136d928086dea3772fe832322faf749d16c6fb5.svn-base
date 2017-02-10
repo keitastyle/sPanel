@@ -1,0 +1,48 @@
+package com.spanel.forms;
+
+
+import com.spanel.app.Request;
+import com.spanel.beans.Class;
+import com.spanel.dao.ClassDAO;
+import com.spanel.dao.DepartmentDAO;
+
+
+/**
+ * Created by koria on 05/12/2016.
+ */
+public class ClassForm extends Form {
+    private ClassDAO classDAO;
+    private DepartmentDAO departmentDAO ;
+
+    public static String DEPARTMENT_NAME_FIELD = "name";
+    public static String CLASS_NAME_FIELD = "class";
+
+    public ClassForm(ClassDAO classDAO, DepartmentDAO departmentDAO) {
+        this.classDAO = classDAO;
+        this.departmentDAO = departmentDAO;
+    }
+    public void create(Request request) {
+        String name = request.getFieldValue(CLASS_NAME_FIELD);
+        String department = request.getFieldValue(DEPARTMENT_NAME_FIELD);
+        validateName(name);
+        if(!hasErrors()){
+            Class classe = new Class();
+            classe.setName(name);
+            Long id = departmentDAO.findByName(department).getId();
+            classe.setDepartmentId(id);
+            classDAO.create(classe);
+
+        }
+    }
+    public void validateName(String name){
+        try{
+            notNullValidation(CLASS_NAME_FIELD, name);
+        }catch (FormValidationException e){
+            setError(e.getMessage());
+        }
+    }
+
+}
+
+
+

@@ -1,0 +1,102 @@
+package com.spanel.views;
+
+import com.spanel.App;
+import com.spanel.beans.Class;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+
+/**
+ * Created by Joel on 16/12/2016.
+ */
+public class Index extends JPanel {
+    private JPanel centerPanel;
+    private JScrollPane jScrollPane;
+    private JPanel northPanel;
+    private JLabel titleLabel;
+
+    private Layout layout;
+
+    public Index(Layout layout, java.util.List<com.spanel.beans.Class> classes) {
+        this.layout = layout;
+        initComponents();
+        int i = 0;
+        for(Class classroom: classes){
+            centerPanel.add(composeClassItem(classroom, i++));
+        }
+    }
+
+    private void initComponents() {
+
+        jScrollPane = new JScrollPane();
+        centerPanel = new JPanel();
+
+        northPanel = new JPanel();
+        titleLabel = new JLabel();
+
+        setBackground(new Color(255, 255, 255));
+        setPreferredSize(new Dimension(770, 520));
+        setLayout(new BorderLayout());
+
+        jScrollPane.setBackground(new Color(255, 255, 255));
+        jScrollPane.setBorder(null);
+
+        centerPanel.setBackground(new Color(255, 255, 255));
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        centerPanel.setLayout(new GridLayout(20, 0));
+
+        jScrollPane.setViewportView(centerPanel);
+
+        add(jScrollPane, BorderLayout.CENTER);
+
+        northPanel.setBackground(new Color(255, 255, 255));
+        northPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        northPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+        titleLabel.setFont(titleLabel.getFont().deriveFont(titleLabel.getFont().getSize()+5f));
+        titleLabel.setForeground(new Color(0, 102, 153));
+        titleLabel.setText("Choix de la classe");
+        northPanel.add(titleLabel);
+
+        add(northPanel, BorderLayout.PAGE_START);
+    }
+
+    private void goToClass(Class classroom) {
+        layout.goToClass(classroom);
+    }
+
+    private JPanel composeClassItem(Class classroom, int i){
+        JPanel classItemPanel;
+        JLabel classItemDescriptionLabel;
+        JLabel classItemNameLabel;
+
+        classItemPanel = new JPanel();
+        classItemNameLabel = new JLabel();
+        classItemDescriptionLabel = new JLabel();
+
+        classItemPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        classItemPanel.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
+        classItemPanel.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent evt) {
+                goToClass(classroom);
+            }
+        });
+        classItemPanel.setLayout(new BoxLayout(classItemPanel, javax.swing.BoxLayout.Y_AXIS));
+
+        classItemNameLabel.setFont(classItemNameLabel.getFont().deriveFont(classItemNameLabel.getFont().getSize()+2f));
+        classItemNameLabel.setForeground(new java.awt.Color(51, 51, 51));
+        classItemNameLabel.setText(classroom.getName());
+        classItemNameLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
+        classItemPanel.add(classItemNameLabel);
+
+        classItemDescriptionLabel.setForeground(new Color(0, 102, 153));
+        classItemDescriptionLabel.setText("Description...");
+        classItemPanel.add(classItemDescriptionLabel);
+
+        if(i%2==1) classItemPanel.setBackground(Color.white);
+        return classItemPanel;
+    }
+}

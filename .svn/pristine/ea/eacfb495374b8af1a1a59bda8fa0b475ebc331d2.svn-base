@@ -1,0 +1,21 @@
+package com.spanel.controllers;
+
+import com.spanel.dao.DAOFactory;
+import com.spanel.dao.UserDAO;
+
+/**
+ * Created by Joel on 30/11/2016.
+ */
+public class AuthController {
+
+    private UserDAO userDAO;
+
+    public AuthController(){
+        userDAO = DAOFactory.getInstance().getUserDao();
+    }
+
+    public void login(){
+
+
+    }
+}

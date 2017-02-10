@@ -1,0 +1,187 @@
+package com.spanel.views.admin;
+
+import javax.swing.*;
+import java.awt.*;
+
+/**
+ * Created by Joel on 04/12/2016.
+ */
+public class Create extends JDialog {
+    private JButton classConfirmButton;
+    private JLabel classHeadLabel;
+    private JPanel classPanel;
+    private JLabel classTitleLabel;
+    private JTextField classTitleTextField;
+    private JButton courseConfirmButton;
+    private JLabel courseHeadLabel;
+    private JPanel coursePanel;
+    private JLabel courseTitleLabel;
+    private JTextField courseTitleTextField;
+    private JButton moduleConfirmButton;
+    private JLabel moduleHeadLabel;
+    private JPanel modulePanel;
+    private JLabel moduleTitleLabel;
+    private JTextField moduleTitleTextField;
+    private JTabbedPane tabbedPane;
+
+
+    public Create(Frame parent, boolean modal) {
+        super(parent, modal);
+        initComponents();
+    }
+
+
+    private void initComponents() {
+        tabbedPane = new JTabbedPane();
+        classPanel = new JPanel();
+        classHeadLabel = new JLabel();
+        classTitleLabel = new JLabel();
+        classTitleTextField = new JTextField();
+        classConfirmButton = new JButton();
+        modulePanel = new JPanel();
+        moduleHeadLabel = new JLabel();
+        moduleTitleLabel = new JLabel();
+        moduleTitleTextField = new JTextField();
+        moduleConfirmButton = new JButton();
+        coursePanel = new JPanel();
+        courseHeadLabel = new JLabel();
+        courseTitleLabel = new JLabel();
+        courseTitleTextField = new JTextField();
+        courseConfirmButton = new JButton();
+
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Création");
+        setAlwaysOnTop(true);
+        setBackground(new Color(255, 255, 255));
+
+        classPanel.setBackground(new Color(255, 255, 255));
+
+        classHeadLabel.setFont(classHeadLabel.getFont().deriveFont(classHeadLabel.getFont().getSize()+2f));
+        classHeadLabel.setForeground(new Color(0, 102, 255));
+        classHeadLabel.setText("Nouvelle classe");
+
+        classTitleLabel.setText("Titre :");
+
+        classConfirmButton.setText("Ajouter");
+
+        GroupLayout classPanelLayout = new GroupLayout(classPanel);
+        classPanel.setLayout(classPanelLayout);
+        classPanelLayout.setHorizontalGroup(
+                classPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(classPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(classPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(classHeadLabel)
+                                        .addGroup(classPanelLayout.createSequentialGroup()
+                                                .addComponent(classTitleLabel)
+                                                .addGap(87, 87, 87)
+                                                .addGroup(classPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                                        .addComponent(classConfirmButton)
+                                                        .addComponent(classTitleTextField, GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE))))
+                                .addContainerGap())
+        );
+        classPanelLayout.setVerticalGroup(
+                classPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(classPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(classHeadLabel)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(classPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                        .addComponent(classTitleLabel)
+                                        .addComponent(classTitleTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(classConfirmButton)
+                                .addContainerGap(187, Short.MAX_VALUE))
+        );
+
+        tabbedPane.addTab("Classe", classPanel);
+
+        modulePanel.setBackground(new Color(255, 255, 255));
+
+        moduleHeadLabel.setFont(moduleHeadLabel.getFont().deriveFont(moduleHeadLabel.getFont().getSize()+2f));
+        moduleHeadLabel.setForeground(new Color(0, 102, 255));
+        moduleHeadLabel.setText("Nouveau module");
+
+        moduleTitleLabel.setText("Titre :");
+
+        moduleConfirmButton.setText("Ajouter");
+
+        GroupLayout modulePanelLayout = new GroupLayout(modulePanel);
+        modulePanel.setLayout(modulePanelLayout);
+        modulePanelLayout.setHorizontalGroup(
+                modulePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(modulePanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(modulePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(moduleHeadLabel)
+                                        .addGroup(modulePanelLayout.createSequentialGroup()
+                                                .addComponent(moduleTitleLabel)
+                                                .addGap(87, 87, 87)
+                                                .addGroup(modulePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                                        .addComponent(moduleConfirmButton)
+                                                        .addComponent(moduleTitleTextField, GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE))))
+                                .addContainerGap())
+        );
+        modulePanelLayout.setVerticalGroup(
+                modulePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(modulePanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(moduleHeadLabel)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(modulePanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                        .addComponent(moduleTitleLabel)
+                                        .addComponent(moduleTitleTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(moduleConfirmButton)
+                                .addContainerGap(187, Short.MAX_VALUE))
+        );
+
+        tabbedPane.addTab("Module", modulePanel);
+
+        coursePanel.setBackground(new Color(255, 255, 255));
+
+        courseHeadLabel.setFont(courseHeadLabel.getFont().deriveFont(courseHeadLabel.getFont().getSize()+2f));
+        courseHeadLabel.setForeground(new Color(0, 102, 255));
+        courseHeadLabel.setText("Nouvelle matière");
+
+        courseTitleLabel.setText("Titre :");
+
+        courseConfirmButton.setText("Ajouter");
+
+        GroupLayout coursePanelLayout = new GroupLayout(coursePanel);
+        coursePanel.setLayout(coursePanelLayout);
+        coursePanelLayout.setHorizontalGroup(
+                coursePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(coursePanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(coursePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(courseHeadLabel)
+                                        .addGroup(coursePanelLayout.createSequentialGroup()
+                                                .addComponent(courseTitleLabel)
+                                                .addGap(87, 87, 87)
+                                                .addGroup(coursePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                                        .addComponent(courseConfirmButton)
+                                                        .addComponent(courseTitleTextField, GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE))))
+                                .addContainerGap())
+        );
+        coursePanelLayout.setVerticalGroup(
+                coursePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(coursePanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(courseHeadLabel)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(coursePanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                        .addComponent(courseTitleLabel)
+                                        .addComponent(courseTitleTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(courseConfirmButton)
+                                .addContainerGap(187, Short.MAX_VALUE))
+        );
+
+        tabbedPane.addTab("Matière", coursePanel);
+
+        getContentPane().add(tabbedPane, BorderLayout.CENTER);
+
+        pack();
+    }
+}

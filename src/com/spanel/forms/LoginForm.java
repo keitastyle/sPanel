@@ -1,0 +1,90 @@
+package com.spanel.forms;
+
+import com.spanel.app.Request;
+import com.spanel.beans.User;
+import com.spanel.controllers.AuthController;
+import com.spanel.dao.DAOException;
+import com.spanel.dao.UserDAO;
+import org.jasypt.util.password.ConfigurablePasswordEncryptor;
+
+/**
+ * Created by Joel on 05/08/2016.
+ */
+public class LoginForm extends Form{
+
+    public static String EMAIL_FIELD = "email";
+    public static String PASSWORD_FIELD = "password";
+
+    private UserDAO userDAO;
+    
+    public LoginForm(UserDAO userDao ) {
+        this.userDAO = userDao;
+    }
+
+    public User connect(String email, String password){
+        User user = null;
+
+        validateEmail(email);
+
+        if ( errors.isEmpty() ) {
+            try {
+                user = userDAO.find( email );
+                if( user == null){
+                    setError("Utilisateur inexistant");
+                }else{
+                    validatePassword(password, user);
+                }
+            }catch (DAOException e){
+                setError(e.getMessage() );
+            }
+        }
+
+        return user;
+    }
+    public User connect(Request request) {
+        String email = request.getFieldValue(EMAIL_FIELD);
+        String password = request.getFieldValue(PASSWORD_FIELD);
+
+        return connect(email, password);
+    }
+
+    private void validateEmail( String email ) {
+        try {
+            emailValidation( email );
+        } catch ( FormValidationException e ) {
+            setError(e.getMessage() );
+        }
+    }
+
+    private void validatePassword( String password, User user ) {
+        try {
+            passwordValidation( password, user);
+        } catch ( FormValidationException e ) {
+            setError(e.getMessage() );
+        }
+    }
+
+    private void emailValidation( String email ) throws FormValidationException {
+        if ( email != null ) {
+            if ( !email.matches( "([^.@]+)(\\.[^.@]+)*@([^.@]+\\.)+([^.@]+)" ) ) {
+                throw new FormValidationException( "Adresse e-mail invalide" );
+            }
+        } else {
+            throw new FormValidationException( "Adresse email non saisie" );
+        }
+    }
+
+    private void passwordValidation( String password, User user ) throws FormValidationException {
+        if ( password == null) {
+            throw new FormValidationException( "Mot de passe vide" );
+        }else{
+            ConfigurablePasswordEncryptor passwordEncryptor = new ConfigurablePasswordEncryptor();
+            passwordEncryptor.setAlgorithm(AuthController.CODING_ALGORITHM);
+            passwordEncryptor.setPlainDigest( false );
+
+            if(!passwordEncryptor.checkPassword(password, user.getPassword())){
+                throw new FormValidationException( "Mot de passe incorrect" );
+            }
+        }
+    }
+}

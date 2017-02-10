@@ -1,0 +1,54 @@
+package com.spanel;
+
+import com.spanel.beans.User;
+import com.spanel.config.Session;
+import com.spanel.dao.DAOFactory;
+import com.spanel.views.Layout;
+import com.spanel.views.auth.Login;
+import org.jasypt.util.password.ConfigurablePasswordEncryptor;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
+/**
+ * Created by Joel on 30/11/2016.
+ */
+public class App {
+    private User user;
+    private DAOFactory daoFactory;
+
+    private App(){
+        daoFactory =  DAOFactory.getInstance();
+    }
+    public static void main(String args[]){
+        App main = new App();
+        User user = Session.loadUserSession(main.daoFactory);
+        if(user ==  null){
+            new Login(main).setVisible(true);
+        }else{
+            new Layout(main).setVisible(true);
+        }
+
+        //
+        /*ConfigurablePasswordEncryptor passwordEncryptor = new ConfigurablePasswordEncryptor();
+        passwordEncryptor.setAlgorithm("SHA-256");
+        passwordEncryptor.setPlainDigest( false );
+        String cryptedPassword = passwordEncryptor.encryptPassword("u-admin");
+        System.out.print(cryptedPassword);*/
+    }
+
+    public DAOFactory getDaoFactory() {
+        return daoFactory;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+}

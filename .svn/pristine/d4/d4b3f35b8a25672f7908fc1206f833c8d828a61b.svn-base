@@ -1,0 +1,19 @@
+package com.spanel.dao;
+
+import com.spanel.beans.File;
+
+/**
+ * Created by koria on 30/12/2016.
+ */
+public interface FileDao  {
+    void create(File file) throws DAOException;
+    void delete(Long id) throws DAOException;
+    File find(Long id) throws DAOException;
+
+    File findOldSchedule() throws DAOException;
+
+    File findByMaxId() throws  DAOException;
+
+    File findProfilePicture() throws DAOException;
+}
+

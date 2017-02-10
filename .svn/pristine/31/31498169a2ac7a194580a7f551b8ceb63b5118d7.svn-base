@@ -1,0 +1,8 @@
+package com.spanel.dao;
+
+/**
+ * Created by koyre on 25/12/16.
+ */
+public interface classModuleDAO {
+    
+}

@@ -1,0 +1,65 @@
+package com.spanel.dao;
+
+import com.spanel.beans.User;
+import static com.spanel.dao.DAOUtilitary.*;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+/**
+ * Created by Joel on 25/11/2016.
+ */
+public class UserDAOImpl implements UserDAO{
+
+    private DAOFactory          daoFactory;
+
+    UserDAOImpl( DAOFactory daoFactory ) {
+        this.daoFactory = daoFactory;
+    }
+
+    @Override
+    public void create(User user) throws DAOException {
+
+    }
+
+    @Override
+    public User find(String email) throws DAOException {
+        return null;
+    }
+
+    @Override
+    public User find(Long id) throws DAOException {
+        return null;
+    }
+
+    private User find( String sql, Object... objects ) throws DAOException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        User user = null;
+
+        try {
+            connection = daoFactory.getConnection();
+            preparedStatement = initPreparedStatement( connection, sql, false, objects );
+            resultSet = preparedStatement.executeQuery();
+            if ( resultSet.next() ) {
+                user = map( resultSet );
+            }
+        } catch ( SQLException e ) {
+            throw new DAOException( e );
+        } finally {
+            silentClose( resultSet, preparedStatement, connection );
+        }
+
+        return user;
+    }
+
+    public static User map( ResultSet resultSet ) throws SQLException {
+        User user = new User();
+        //
+        return user;
+    }
+}
+

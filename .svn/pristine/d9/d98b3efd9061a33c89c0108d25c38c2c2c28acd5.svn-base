@@ -1,0 +1,167 @@
+package com.spanel.views;
+
+import com.spanel.helpers.ImagePanel;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+/**
+ * Created by Joel on 06/11/2016.
+ */
+public class Layout extends JFrame {
+    private JMenuBar mainBar = new JMenuBar();
+    private JMenu menu1 = new JMenu("sPanel");
+    private JMenu menu2 = new JMenu("Aide");
+    private JMenuItem account = new JMenuItem("Mon compte");
+    private JMenuItem disconnect = new JMenuItem("Deconnexion");
+    private JMenuItem exit = new JMenuItem("Fermer");
+    private JMenuItem about =  new JMenuItem("A propos");
+
+    private JButton home = new JButton("Accueil");
+    private JPanel homePanel = new JPanel();
+    private JLabel name = new JLabel("John Doe");
+    private JLabel description = new JLabel("Description");
+    private JTextField searchField = new JTextField("Rechercher...");
+    private JPanel searchPanel = new JPanel();
+    private JLabel notifications = new JLabel("NOTIFICATION");
+
+    private Font defaultFont = new Font("Calibri", Font.PLAIN, 15);
+
+    private Container container = getContentPane();
+
+    public Layout(){
+        try {
+            UIManager.setLookAndFeel(
+                    UIManager.getSystemLookAndFeelClassName());
+        }
+        catch (ClassNotFoundException e) {
+            System.err.println("Couldn't find class for system look and feel");
+            System.err.println("Using the default look and feel.");
+        }
+
+        catch (UnsupportedLookAndFeelException e) {
+            System.err.println("Can't use the system look and feel on this platform.");
+            System.err.println("Using the default look and feel.");
+        }
+
+        catch (Exception e) {
+            System.err.println("Couldn't get system look and feel for some reason.");
+            System.err.println("Using the default look and feel.");
+            e.printStackTrace();
+        }
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setMinimumSize(new Dimension(1000, 650));
+        container.setBackground(Color.WHITE);
+
+        composeMenus();
+
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+                composeLeftSide(), composeRightSide());
+
+        splitPane.setOneTouchExpandable(false);
+        splitPane.setDividerSize(1);
+        splitPane.setDividerLocation(300);
+        splitPane.setLastDividerLocation(300);
+
+
+        add(splitPane);
+    }
+
+    public static void main(String[] args){
+        Layout lay = new Layout();
+        lay.setVisible(true);
+    }
+
+    private void composeMenus(){
+        setJMenuBar(mainBar);
+        mainBar.add(menu1);
+        mainBar.add(menu2);
+        menu1.add(account);
+        menu1.addSeparator();
+        menu1.add(disconnect);
+        menu1.add(exit);
+        menu2.add(about);
+    }
+
+    private JPanel composeLeftSide(){
+        JPanel panel = new JPanel();
+        panel.setBorder(new EmptyBorder(0,0,0,0));
+
+        panel.setBackground(new Color(240,250,254));
+        //panel.setBorder(BorderFactory.createMatteBorder(0,0,0,1,new Color(202, 202, 202)));
+
+        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+        JLabel userImage = ImagePanel.get("D:\\Workspace\\IdeaProjects\\sPanel\\assets\\uploads\\img\\a.jpg");
+        userImage.setSize(new Dimension(70,70));
+
+        // panel.add(userImage);
+
+        name.setFont(defaultFont.deriveFont((float)15));
+        panel.add(name);
+
+        description.setFont(defaultFont.deriveFont((float)13));
+        description.setForeground(new Color(121,121,121));
+        panel.add(description);
+
+        searchField.setBorder(BorderFactory.createMatteBorder(0,0,2,0, new Color(240,240,240)));
+        searchField.setBackground(new Color(240,250,254));
+        searchField.setPreferredSize(new Dimension(120,20));
+        searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.PAGE_AXIS));
+        description.setFont(defaultFont.deriveFont((float)15));
+        searchPanel.add(searchField);
+        panel.add(searchPanel);
+
+        panel.add( Box.createVerticalStrut(10) );
+
+        home.setBackground(new Color(199,237, 252));
+        home.setBorder(BorderFactory.createMatteBorder(0,0,0,0, new Color(97, 156, 227)));
+        home.setBorder(new EmptyBorder(8,13,8,13));
+        home.setForeground(new Color(121,121,121));
+        home.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panel.add(home);
+
+        panel.add( Box.createVerticalStrut(10) );
+
+        notifications.setFont(defaultFont.deriveFont((float)20));
+        notifications.setFont(defaultFont.deriveFont((float)16));
+        notifications.setForeground(new Color(97, 156, 227));
+        panel.add(notifications);
+
+
+        JPanel notificationBar = new JPanel();
+        notificationBar.setBorder(BorderFactory.createMatteBorder(0,0,1,0, new Color(97, 156, 227)));
+        notificationBar.setBackground(new Color(240,250,254));
+        panel.add(notificationBar);
+
+        panel.add( Box.createVerticalStrut(1000) );
+        // panel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        return panel;
+    }
+
+    private JPanel composeRightSide(){
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        //panel.setBackground(Color.WHITE);
+        JTabbedPane tabPane = new JTabbedPane();
+        tabPane.setBackground(Color.WHITE);
+
+        tabPane.addTab("Annonces", new JPanel());
+        tabPane.addTab("Emplois du temps", new JPanel());
+        tabPane.addTab("Examens", new JPanel());
+        tabPane.addTab("Notes", new JPanel());
+        tabPane.addTab("Modules", new JPanel());
+        tabPane.addTab("Etudiants", new JPanel());
+        tabPane.addTab("Affectations", new JPanel());
+        panel.add(tabPane);
+
+        panel.setBorder(new EmptyBorder(5, 10, 5, 10));
+        return panel;
+    }
+}
